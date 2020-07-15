@@ -2,7 +2,7 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { offline } from 'redux-offline';
 import offlineConfig from 'redux-offline/lib/defaults';
-import counterReducer from '../features/counter/counterSlice';
+import counterReducer from '../features/counter/counterState';
 
 export const store = configureStore({
   reducer: {
