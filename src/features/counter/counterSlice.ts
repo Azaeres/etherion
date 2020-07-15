@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../../app/store';
 
-interface CounterState {
-  value: number;
+// https://templecoding.com/blog/real-immutable-types-with-typescript
+type Immutable<T> = {
+  readonly [K in keyof T]: Immutable<T[K]>;
 }
+
+type CounterState = Immutable<{
+  value: number;
+}>;
 
 const initialState: CounterState = {
   value: 0,
