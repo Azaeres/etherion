@@ -7,7 +7,7 @@ export const GAME_WIDTH = 800;
 
 export interface IGameProps {};
 
-export default class IGame extends React.Component<IGameProps, any> {
+export default class PhaserGame extends React.Component<IGameProps, any> {
   componentDidMount() {
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,

@@ -45,7 +45,7 @@ export default class CounterScene extends Scene {
   createCountText() {
     const state = store.getState();
     const count = selectCount(state);
-    this.countText = this.add.text(250, 200, String(count), countTextStyle);
+    this.countText = this.add.text(380, 180, String(count), countTextStyle);
   }
 
   createAddButton() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
-import Game from './features/game/Game';
+import PhaserGame from './features/game/PhaserGame';
 import './App.css';
 
 function App() {
@@ -52,7 +52,7 @@ function App() {
           </a>
         </span>
       </header>
-      <Game />
+      <PhaserGame />
     </div>
   );
 }
