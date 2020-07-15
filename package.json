@@ -1,5 +1,5 @@
 {
-  "name": "etherion",
+  "name": "multiverse-visual-novel-engine",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@types/react": "^16.9.43",
-    "@types/react-dom": "^16.9.8"
+    "@types/react-dom": "^16.9.8",
+    "prettier": "2.0.5"
   }
 }

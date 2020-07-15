@@ -1,5 +1,5 @@
-import { store } from "../../state/store";
-import { Scene } from "phaser";
+import { store } from '../../state/store';
+import { Scene } from 'phaser';
 import {
   decrement,
   increment,
@@ -9,13 +9,13 @@ import {
 } from './counterState';
 
 const buttonStyle = {
-  backgroundColor: "white",
-  color: "blue",
-  fontSize: 48
+  backgroundColor: 'white',
+  color: 'blue',
+  fontSize: 48,
 };
 const countTextStyle = {
   color: 'white',
-  fontSize: 48
+  fontSize: 48,
 };
 
 export default class CounterScene extends Scene {
@@ -31,15 +31,15 @@ export default class CounterScene extends Scene {
   }
 
   createSubtractButton() {
-    const addButton = this.add.text(550, 250, "-", buttonStyle);
+    const addButton = this.add.text(550, 250, '-', buttonStyle);
     addButton.setInteractive({ useHandCursor: true });
-    addButton.on("pointerup", this.onSub);
+    addButton.on('pointerup', this.onSub);
   }
 
   createAsyncButton() {
-    const addAsyncButton = this.add.text(285, 250, 'Add Async', buttonStyle)
+    const addAsyncButton = this.add.text(285, 250, 'Add Async', buttonStyle);
     addAsyncButton.setInteractive({ useHandCursor: true });
-    addAsyncButton.on("pointerup", this.onIncrementAsync);
+    addAsyncButton.on('pointerup', this.onIncrementAsync);
   }
 
   createCountText() {
@@ -49,9 +49,9 @@ export default class CounterScene extends Scene {
   }
 
   createAddButton() {
-    const addButton = this.add.text(250, 250, "+", buttonStyle);
+    const addButton = this.add.text(250, 250, '+', buttonStyle);
     addButton.setInteractive({ useHandCursor: true });
-    addButton.on("pointerup", this.onAdd);
+    addButton.on('pointerup', this.onAdd);
   }
 
   /**
