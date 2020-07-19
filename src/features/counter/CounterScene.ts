@@ -32,6 +32,12 @@ export default class CounterScene extends Scene {
   }
 
   createFullscreenButton() {
+    // const supported = Phaser.Device.Fullscreen.available;
+    // console.log('fullscreen > supported:', supported);
+    this.scale.on('fullscreenunsupported', (...args: any) => {
+      this.add.text(10, 100, 'fullscreen is unsupported!');
+    });
+
     const fullscreenButton = this.add.text(10, 10, 'Fullscreen', buttonStyle);
     fullscreenButton.setInteractive({ useHandCursor: true });
     fullscreenButton.on('pointerup', () => {
