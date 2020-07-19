@@ -22,12 +22,27 @@ export default class CounterScene extends Scene {
   countText?: Phaser.GameObjects.Text;
 
   create() {
+    this.createFullscreenButton();
     this.createAddButton();
     this.createCountText();
     this.createAsyncButton();
     this.createSubtractButton();
 
     store.subscribe(this.stateDidUpdate);
+  }
+
+  createFullscreenButton() {
+    const fullscreenButton = this.add.text(10, 10, 'Fullscreen', buttonStyle);
+    fullscreenButton.setInteractive({ useHandCursor: true });
+    fullscreenButton.on('pointerup', () => {
+      if (this.scale.isFullscreen) {
+        this.scale.stopFullscreen();
+        // On stop fulll screen
+      } else {
+        this.scale.startFullscreen();
+        // On start fulll screen
+      }
+    });
   }
 
   createSubtractButton() {
