@@ -13,27 +13,25 @@ const buttonStyle = {
   color: 'blue',
   fontSize: 48,
 };
-// const countTextStyle = {
-//   color: 'white',
-//   fontSize: 48,
-// };
+const countTextStyle = {
+  color: 'white',
+  fontSize: 48,
+};
 
 export default class CounterScene extends Scene {
   countText?: Phaser.GameObjects.Text;
 
   create() {
-    // this.createFullscreenButton();
+    this.createFullscreenButton();
     this.createAddButton();
     this.createCountText();
-    // this.createAsyncButton();
-    // this.createSubtractButton();
+    this.createAsyncButton();
+    this.createSubtractButton();
 
     store.subscribe(this.stateDidUpdate);
   }
 
   createFullscreenButton() {
-    // const supported = Phaser.Device.Fullscreen.available;
-    // console.log('fullscreen > supported:', supported);
     this.scale.on('fullscreenunsupported', (...args: any) => {
       this.add.text(400, 100, 'fullscreen is unsupported!');
     });
@@ -66,11 +64,7 @@ export default class CounterScene extends Scene {
   createCountText() {
     const state = store.getState();
     const count = selectCount(state);
-    this.countText = this.add.text(
-      380,
-      180,
-      String(count) /* , countTextStyle */
-    );
+    this.countText = this.add.text(380, 180, String(count), countTextStyle);
   }
 
   createAddButton() {
