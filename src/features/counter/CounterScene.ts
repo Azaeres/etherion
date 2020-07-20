@@ -22,11 +22,11 @@ export default class CounterScene extends Scene {
   countText?: Phaser.GameObjects.Text;
 
   create() {
-    this.createFullscreenButton();
+    // this.createFullscreenButton();
     this.createAddButton();
     this.createCountText();
-    this.createAsyncButton();
-    this.createSubtractButton();
+    // this.createAsyncButton();
+    // this.createSubtractButton();
 
     store.subscribe(this.stateDidUpdate);
   }
@@ -66,7 +66,11 @@ export default class CounterScene extends Scene {
   createCountText() {
     const state = store.getState();
     const count = selectCount(state);
-    this.countText = this.add.text(380, 180, String(count), countTextStyle);
+    this.countText = this.add.text(
+      380,
+      180,
+      String(count) /* , countTextStyle */
+    );
   }
 
   createAddButton() {

@@ -15,10 +15,10 @@ export default class PhaserGame extends React.Component<IGameProps, any> {
       height: GAME_HEIGHT,
       parent: 'phaser-game',
       scene: [CounterScene],
-      // scale: {
-      //   mode: Phaser.Scale.FIT,
-      //   autoCenter: Phaser.Scale.CENTER_BOTH,
-      // },
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+      },
     };
 
     new Phaser.Game(config);
