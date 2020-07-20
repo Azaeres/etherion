@@ -13,10 +13,10 @@ const buttonStyle = {
   color: 'blue',
   fontSize: 48,
 };
-const countTextStyle = {
-  color: 'white',
-  fontSize: 48,
-};
+// const countTextStyle = {
+//   color: 'white',
+//   fontSize: 48,
+// };
 
 export default class CounterScene extends Scene {
   countText?: Phaser.GameObjects.Text;
