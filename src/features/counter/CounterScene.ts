@@ -73,16 +73,13 @@ export default class CounterScene extends Scene {
   }
 
   createEtherionLogo() {
-    console.log('createEtherionLogo :');
     this.logoAlphaRate = 1;
     this.logoRate = 1;
-    const SCALE = 0.5;
     this.etherionLogo = this.add.sprite(
       this.sys.canvas.width / 2,
       this.sys.canvas.height / 2 - 20,
       'etherionLogo'
     );
-    console.log(' > this.etherionLogo:', this.etherionLogo);
 
     this.etherionLogo.setScale(0.6);
     this.etherionLogo.setOrigin(0.5, 0.4);
