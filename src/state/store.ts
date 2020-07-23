@@ -8,10 +8,11 @@ export const store = configureStore({
   reducer: {
     counter: counterReducer,
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
-  enhancers: [
-    offline(offlineConfig)
-  ]
+  middleware: (getDefaultMiddleware) =>
+    process.env.NODE_ENV === 'development'
+      ? getDefaultMiddleware().concat(logger)
+      : getDefaultMiddleware(),
+  enhancers: [offline(offlineConfig)],
 });
 
 export type RootState = ReturnType<typeof store.getState>;

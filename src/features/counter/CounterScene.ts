@@ -7,6 +7,8 @@ import {
   incrementAsync,
   selectCount,
 } from './counterState';
+import logo from '../../logo.svg';
+import testBackground from '../../test_background.jpg';
 
 const buttonStyle = {
   backgroundColor: 'white',
@@ -20,15 +22,46 @@ const countTextStyle = {
 
 export default class CounterScene extends Scene {
   countText?: Phaser.GameObjects.Text;
+  logo?: any;
+
+  preload() {
+    // console.log('preload :');
+    this.load.image('logo', logo);
+    this.load.image('background', testBackground);
+  }
 
   create() {
+    // console.log('create  > this:', this);
+    this.createBackground();
     this.createFullscreenButton();
     this.createAddButton();
     this.createCountText();
     this.createAsyncButton();
     this.createSubtractButton();
+    this.createLogoImage();
 
     store.subscribe(this.stateDidUpdate);
+  }
+
+  update(arg1: number, arg2: number) {
+    // console.log(' > arg1:', arg1);
+    const rot = -arg1 / 10;
+    // console.log(' > rot:', rot);
+    // console.log('update :');
+    this.logo.setRotation(rot);
+  }
+
+  createBackground() {
+    const bg = this.add.sprite(0, 0, 'background');
+    bg.setOrigin(0, 0);
+    bg.displayWidth = this.sys.canvas.width;
+    bg.displayHeight = this.sys.canvas.height;
+  }
+
+  createLogoImage() {
+    this.logo = this.add.sprite(250, 250, 'logo');
+    // console.log('createLogoImage  > this.logo:', this.logo);
+    this.logo.setOrigin(0.5, 0.6);
   }
 
   createFullscreenButton() {
