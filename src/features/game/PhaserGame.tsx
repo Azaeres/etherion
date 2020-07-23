@@ -2,8 +2,8 @@ import React from 'react';
 import Phaser from 'phaser';
 import CounterScene from '../counter/CounterScene';
 
-export const GAME_HEIGHT = 486;
 export const GAME_WIDTH = 864;
+export const GAME_HEIGHT = 486;
 
 export interface IGameProps {}
 
