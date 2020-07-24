@@ -66,7 +66,7 @@ export default class CounterScene extends Scene {
 
     if (this.etherionLogo) {
       this.etherionLogo.setScale(
-        this.etherionLogo.scale + (delta * this.logoRate) / 50000
+        this.etherionLogo.scale + (delta * this.logoRate) / 30000
       );
       this.etherionLogo.alpha += delta * 0.0004 * this.logoAlphaRate;
     }
@@ -81,7 +81,7 @@ export default class CounterScene extends Scene {
       'etherionLogo'
     );
 
-    this.etherionLogo.setScale(0.6);
+    this.etherionLogo.setScale(0.8);
     this.etherionLogo.setOrigin(0.5, 0.4);
     this.etherionLogo.alpha = 0.0;
     setTimeout(() => {
