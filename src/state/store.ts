@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import { offline } from 'redux-offline';
-import offlineConfig from 'redux-offline/lib/defaults';
+import { offline } from '@redux-offline/redux-offline';
+import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import counterReducer from '../features/counter/counterState';
 
+// Type fix:
+const enhancer: any = offline(offlineConfig);
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
@@ -12,7 +14,7 @@ export const store = configureStore({
     process.env.NODE_ENV === 'development'
       ? getDefaultMiddleware().concat(logger)
       : getDefaultMiddleware(),
-  enhancers: [offline(offlineConfig)],
+  enhancers: [enhancer],
 });
 
 export type RootState = ReturnType<typeof store.getState>;
