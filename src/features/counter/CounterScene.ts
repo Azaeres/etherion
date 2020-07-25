@@ -7,9 +7,9 @@ import {
   incrementAsync,
   selectCount,
 } from './counterState';
-import logo from '../../logo.svg';
+// import logo from '../../logo.svg';
 import testBackground from '../../test_background.jpg';
-import etherionLogo from '../../etherion_logo-2.png';
+import etherionLogo from '../../etherion_logo-3.png';
 
 const buttonStyle = {
   backgroundColor: 'white',
@@ -25,18 +25,18 @@ export default class CounterScene extends Scene {
   countText?: Phaser.GameObjects.Text;
   logo?: any;
   etherionLogo: any;
-  logoRate: number;
-  logoAlphaRate: number;
+  // logoRate: number;
+  // logoAlphaRate: number;
 
   constructor() {
     super('Logo Scene');
-    this.logoRate = 1;
-    this.logoAlphaRate = 1;
+    // this.logoRate = 1;
+    // this.logoAlphaRate = 1;
   }
 
   preload() {
     // console.log('preload :');
-    this.load.image('logo', logo);
+    // this.load.image('logo', logo);
     this.load.image('background', testBackground);
     this.load.image('etherionLogo', etherionLogo);
   }
@@ -51,49 +51,61 @@ export default class CounterScene extends Scene {
     // this.createSubtractButton();
     // this.createLogoImage();
     this.createEtherionLogo();
+    // this.createLogoImage();
 
     store.subscribe(this.stateDidUpdate);
   }
 
-  update(time: number, delta: number) {
-    // console.log(' > delta:', delta);
-    if (this.logo) {
-      const rot = -time / 10;
-      // console.log(' > rot:', rot);
-      // console.log('update :');
-      this.logo.setRotation(rot);
-    }
-
-    if (this.etherionLogo) {
-      this.etherionLogo.setScale(
-        this.etherionLogo.scale + (delta * this.logoRate) / 30000
-      );
-      this.etherionLogo.alpha += delta * 0.0004 * this.logoAlphaRate;
-    }
-  }
-
   createEtherionLogo() {
-    this.logoAlphaRate = 1;
-    this.logoRate = 1;
+    // this.logoAlphaRate = 1;
+    // this.logoRate = 1;
     this.etherionLogo = this.add.sprite(
       this.sys.canvas.width / 2,
       this.sys.canvas.height / 2 - 20,
       'etherionLogo'
     );
 
-    this.etherionLogo.setScale(0.8);
-    this.etherionLogo.setOrigin(0.5, 0.4);
+    this.etherionLogo.setScale(0.6);
+    this.etherionLogo.setOrigin(0.5, 0.42);
     this.etherionLogo.alpha = 0.0;
-    setTimeout(() => {
-      this.logoRate = 20;
-      this.logoAlphaRate = -12;
-      this.createBackground();
-      setTimeout(() => {
-        this.etherionLogo.destroy();
-        this.etherionLogo = null;
-        // this.createEtherionLogo();
-      }, 1200);
-    }, 4500);
+
+    this.tweens.add({
+      targets: this.etherionLogo,
+      scale: { from: 0.6, to: 1 },
+      alpha: { from: 0, to: 1 },
+      ease: 'Linear',
+      delay: 100,
+      duration: 6000,
+      repeat: 0,
+      yoyo: false,
+      onComplete: () => {
+        this.createBackground();
+
+        this.tweens.add({
+          targets: this.etherionLogo,
+          alpha: { from: 1, to: 0 },
+          ease: 'Linear',
+          delay: 0,
+          duration: 100,
+          repeat: 0,
+          yoyo: false,
+        });
+
+        this.tweens.add({
+          targets: this.etherionLogo,
+          scale: { from: 1, to: 10 },
+          ease: 'Linear',
+          delay: 0,
+          duration: 1000,
+          repeat: 0,
+          yoyo: false,
+          onComplete: () => {
+            this.etherionLogo.destroy();
+            this.etherionLogo = null;
+          },
+        });
+      },
+    });
   }
 
   createBackground() {
@@ -107,25 +119,33 @@ export default class CounterScene extends Scene {
       targets: bg,
       alpha: { from: 0, to: 1 },
       ease: 'Linear',
+      delay: 800,
       duration: 2000,
       repeat: 0,
       yoyo: false,
-    }); // .to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-
-    setTimeout(() => {
-      this.createFullscreenButton();
-      this.createAddButton();
-      this.createCountText();
-      this.createAsyncButton();
-      this.createSubtractButton();
-      this.createLogoImage();
-    }, 2000);
+      onComplete: () => {
+        this.createFullscreenButton();
+        this.createAddButton();
+        this.createCountText();
+        this.createAsyncButton();
+        this.createSubtractButton();
+        this.createLogoImage();
+      },
+    });
   }
 
   createLogoImage() {
-    this.logo = this.add.sprite(250, 250, 'logo');
-    // console.log('createLogoImage  > this.logo:', this.logo);
-    this.logo.setOrigin(0.5, 0.6);
+    this.logo = this.add.sprite(250, 250, 'etherionLogo');
+    this.logo.setOrigin(0.5, 0.42);
+    this.tweens.add({
+      targets: this.logo,
+      angle: { from: 0, to: 360 },
+      ease: 'Linear',
+      // delay: 800,
+      duration: 700,
+      repeat: -1,
+      yoyo: false,
+    });
   }
 
   createFullscreenButton() {
