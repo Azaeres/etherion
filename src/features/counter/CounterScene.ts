@@ -135,11 +135,19 @@ export default class CounterScene extends Scene {
   }
 
   createLogoImage() {
-    this.logo = this.add.sprite(250, 250, 'etherionLogo');
+    this.logo = this.add.sprite(
+      this.sys.canvas.width - 150,
+      150,
+      'etherionLogo'
+    );
     this.logo.setOrigin(0.5, 0.42);
+    this.logo.setInteractive({ useHandCursor: true });
+    this.logo.on('pointerup', () => {
+      console.log('click logo  :');
+    });
     this.tweens.add({
       targets: this.logo,
-      angle: { from: 0, to: 360 },
+      angle: { from: 360, to: 0 },
       ease: 'Linear',
       // delay: 800,
       duration: 700,
