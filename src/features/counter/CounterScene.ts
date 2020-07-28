@@ -65,13 +65,13 @@ export default class CounterScene extends Scene {
       'etherionLogo'
     );
 
-    this.etherionLogo.setScale(0.6);
+    this.etherionLogo.setScale(0.4);
     this.etherionLogo.setOrigin(0.5, 0.42);
     this.etherionLogo.alpha = 0.0;
 
     this.tweens.add({
       targets: this.etherionLogo,
-      scale: { from: 0.6, to: 1 },
+      scale: { from: 0.4, to: 0.6 },
       alpha: { from: 0, to: 1 },
       ease: 'Linear',
       delay: 100,
@@ -84,26 +84,27 @@ export default class CounterScene extends Scene {
         this.tweens.add({
           targets: this.etherionLogo,
           alpha: { from: 1, to: 0 },
+          scale: { from: 0.6, to: 1 },
           ease: 'Linear',
           delay: 0,
-          duration: 100,
+          duration: 200,
           repeat: 0,
           yoyo: false,
         });
 
-        this.tweens.add({
-          targets: this.etherionLogo,
-          scale: { from: 1, to: 10 },
-          ease: 'Linear',
-          delay: 0,
-          duration: 1000,
-          repeat: 0,
-          yoyo: false,
-          onComplete: () => {
-            this.etherionLogo.destroy();
-            this.etherionLogo = null;
-          },
-        });
+        // this.tweens.add({
+        //   targets: this.etherionLogo,
+        //   scale: { from: 1, to: 1.05 },
+        //   ease: 'Linear',
+        //   delay: 10,
+        //   duration: 400,
+        //   repeat: 0,
+        //   yoyo: false,
+        //   onComplete: () => {
+        //     this.etherionLogo.destroy();
+        //     this.etherionLogo = null;
+        //   },
+        // });
       },
     });
   }
