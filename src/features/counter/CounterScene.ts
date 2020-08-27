@@ -48,7 +48,7 @@ export default class CounterScene extends Scene {
       // this.createEtherionLogo()
       //   .then(this.createBackground)
       .then(this.createGraphicsBackground)
-      .then(() => this.createFullscreenButton({ text: 'FS' }))
+      .then(() => this.createFullscreenButton({ text: 'FS----' }))
       .then(() => this.createSubtractButton({ onPointerUp: this.onSub }))
       .then(() =>
         this.createAsyncButton({ onPointerUp: this.onIncrementAsync })
