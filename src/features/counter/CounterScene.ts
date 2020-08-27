@@ -1,19 +1,12 @@
 import { store } from '../../state/store';
 import { Scene } from 'phaser';
-import {
-  decrement,
-  increment,
-  // incrementByAmount,
-  incrementAsync,
-  // selectCount,
-} from './counterState';
-// import logo from '../../logo.svg';
+import { decrement, increment, incrementAsync } from './counterState';
+
 import testBackground from '../../test_background.jpg';
-// import etherionLogo from '../../etherion_logo-3.png';
-// import { Immutable } from '../../state/types';
 import createCountText, { countTextFonts } from './CountText';
 import createLogoImage, { preloadLogoImage } from './LogoImage';
 import createEtherionLogo, { preloadEtherionLogo } from './EtherionLogo';
+import { selectNeedsUpdate } from '../../appState';
 
 const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in pellentesque purus. Nam eu finibus nibh. Ut porttitor vehicula tortor, id convallis orci porta sed. Pellentesque turpis tortor, faucibus eu placerat eu, tempor id nibh. Donec sollicitudin sem nunc, eu commodo velit maximus vitae. Aliquam eleifend ex sit amet tortor suscipit tempus. Nullam venenatis porta rhoncus. Ut malesuada magna non mauris tincidunt commodo.`;
 
@@ -45,6 +38,7 @@ export default class CounterScene extends Scene {
         'Oswald-Light',
         'Oswald-Regular',
         'Oswald-SemiBold',
+        'OpenSansCondensed-Bold',
       ])
     );
   }
@@ -65,7 +59,8 @@ export default class CounterScene extends Scene {
       .then(() =>
         this.createAddButton({ x: 40, y: 400, onPointerUp: this.onAdd })
       )
-      .then(this.createLogoImage);
+      .then(this.createLogoImage)
+      .then(this.createNeedsUpdateNotification);
   }
 
   // Event handlers
@@ -98,6 +93,40 @@ export default class CounterScene extends Scene {
   createAsyncButton = createAsyncButton.bind(this);
   createCountText = createCountText.bind(this);
   createAddButton = createAddButton.bind(this);
+  createNeedsUpdateNotification = createNeedsUpdateNotification.bind(this);
+}
+
+function createNeedsUpdateNotification(this: Scene) {
+  const state = store.getState();
+  const needsUpdate = selectNeedsUpdate(state);
+  console.log('createNeedsUpdateNotification  > needsUpdate:', needsUpdate);
+  const alpha = needsUpdate ? 1 : 0;
+  console.log(' > alpha:', alpha);
+
+  const needsUpdateNotificationText = this.add.text(
+    600,
+    10,
+    'Update is available!',
+    {
+      fontSize: 14,
+      fontFamily: 'OpenSansCondensed-Bold',
+    }
+  );
+  needsUpdateNotificationText.alpha = alpha;
+  console.log(' > needsUpdateNotificationText:', needsUpdateNotificationText);
+
+  const unsubscribe = store.subscribe(() => {
+    const state = store.getState();
+    const nowNeedsUpdate = selectNeedsUpdate(state);
+    needsUpdateNotificationText.alpha = nowNeedsUpdate ? 1 : 0;
+  });
+  needsUpdateNotificationText.on('destroy', () => {
+    unsubscribe();
+  });
+  // setTimeout(() => {
+  //   const action = markIsUpdated();
+  //   store.dispatch(action);
+  // }, 2000);
 }
 
 function createAddButton(

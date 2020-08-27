@@ -3,10 +3,16 @@ import logger from 'redux-logger';
 import { offline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import counterReducer from '../features/counter/counterState';
-import appReducer from '../appState';
+import appReducer, { markIsUpdated } from '../appState';
 
 // Type fix:
-const enhancer: any = offline(offlineConfig);
+const enhancer: any = offline({
+  ...offlineConfig,
+  persistCallback: () => {
+    console.log('persist rehydrated! :');
+    store.dispatch(markIsUpdated());
+  },
+});
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
