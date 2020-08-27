@@ -4,7 +4,7 @@ import './App.css';
 import './fonts.css';
 import { version } from '../package.json';
 
-console.info(`Etherion v{version}`);
+console.info(`Etherion v${version}`);
 
 function App(props: any) {
   return (
