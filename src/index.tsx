@@ -5,6 +5,7 @@ import App from './App';
 import { store } from './state/store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
+import { markNeedsUpdate } from './appState';
 
 // console.log('index  > process.env:', process.env);
 
@@ -30,5 +31,6 @@ serviceWorker.register({
 
   onUpdate(registration) {
     console.log('App has been updated! > registration:', registration);
+    store.dispatch(markNeedsUpdate());
   },
 });
