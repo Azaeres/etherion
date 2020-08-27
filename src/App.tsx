@@ -3,6 +3,9 @@ import React from 'react';
 // import { Counter } from './features/counter/Counter';
 import PhaserGame from './features/game/PhaserGame';
 import './App.css';
+import './fonts.css';
+// import './fonts/Open_Sans/opensans-light-webfont.woff2';
+// console.log(' > fonts:', fonts);
 
 function App() {
   return (

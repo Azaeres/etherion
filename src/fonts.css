@@ -1,0 +1,121 @@
+/* Open Sans Condensed */
+@font-face {
+  font-family: 'OpenSansCondensed-Light';
+  src: local('OpenSansCondensed-Light'),
+    url(./fonts/Open_Sans_Condensed/OpenSansCondensed-Light.ttf)
+      format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSansCondensed-Bold';
+  src: local('OpenSansCondensed-Bold'),
+    url(./fonts/Open_Sans_Condensed/OpenSansCondensed-Bold.ttf)
+      format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSansCondensed-LightItalic';
+  src: local('OpenSansCondensed-LightItalic'),
+    url(./fonts/Open_Sans_Condensed/OpenSansCondensed-LightItalic.ttf)
+      format('truetype');
+}
+
+/* Open Sans */
+
+@font-face {
+  font-family: 'OpenSans-Light';
+  src: local('OpenSans-Light'),
+    url(./fonts/Open_Sans/OpenSans-Light.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans-Regular';
+  src: local('OpenSans-Regular'),
+    url(./fonts/Open_Sans/OpenSans-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans-Bold';
+  src: local('OpenSans-Bold'),
+    url(./fonts/Open_Sans/OpenSans-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans-BoldItalic';
+  src: local('OpenSans-BoldItalic'),
+    url(./fonts/Open_Sans/OpenSans-BoldItalic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans-ExtraBold';
+  src: local('OpenSans-ExtraBold'),
+    url(./fonts/Open_Sans/OpenSans-ExtraBold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans-ExtraBoldItalic';
+  src: local('OpenSans-ExtraBoldItalic'),
+    url(./fonts/Open_Sans/OpenSans-ExtraBoldItalic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans-Italic';
+  src: local('OpenSans-Italic'),
+    url(./fonts/Open_Sans/OpenSans-Italic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans-LightItalic';
+  src: local('OpenSans-LightItalic'),
+    url(./fonts/Open_Sans/OpenSans-LightItalic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans-SemiBold';
+  src: local('OpenSans-SemiBold'),
+    url(./fonts/Open_Sans/OpenSans-SemiBold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans-SemiBoldItalic';
+  src: local('OpenSans-SemiBoldItalic'),
+    url(./fonts/Open_Sans/OpenSans-SemiBoldItalic.ttf) format('truetype');
+}
+
+/* Oswald */
+
+@font-face {
+  font-family: 'Oswald-Light';
+  src: local('Oswald-Light'),
+    url(./fonts/Oswald/static/Oswald-Light.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Oswald-ExtraLight';
+  src: local('Oswald-ExtraLight'),
+    url(./fonts/Oswald/static/Oswald-ExtraLight.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Oswald-Bold';
+  src: local('Oswald-Bold'),
+    url(./fonts/Oswald/static/Oswald-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Oswald-Medium';
+  src: local('Oswald-Medium'),
+    url(./fonts/Oswald/static/Oswald-Medium.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Oswald-Regular';
+  src: local('Oswald-Regular'),
+    url(./fonts/Oswald/static/Oswald-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Oswald-SemiBold';
+  src: local('Oswald-SemiBold'),
+    url(./fonts/Oswald/static/Oswald-SemiBold.ttf) format('truetype');
+}
