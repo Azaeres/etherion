@@ -99,9 +99,7 @@ export default class CounterScene extends Scene {
 function createNeedsUpdateNotification(this: Scene) {
   const state = store.getState();
   const needsUpdate = selectNeedsUpdate(state);
-  console.log('createNeedsUpdateNotification  > needsUpdate:', needsUpdate);
   const alpha = needsUpdate ? 1 : 0;
-  console.log(' > alpha:', alpha);
 
   const needsUpdateNotificationText = this.add.text(
     600,
