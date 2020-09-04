@@ -7,6 +7,8 @@ import createCountText, { countTextFonts } from './CountText';
 import createLogoImage, { preloadLogoImage } from './LogoImage';
 import createEtherionLogo, { preloadEtherionLogo } from './EtherionLogo';
 import { selectNeedsUpdate } from '../../appState';
+import preloadFonts from '../../util/preloadFonts';
+import SimpleScene from '../scenes/simple-scene';
 
 const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in pellentesque purus. Nam eu finibus nibh. Ut porttitor vehicula tortor, id convallis orci porta sed. Pellentesque turpis tortor, faucibus eu placerat eu, tempor id nibh. Donec sollicitudin sem nunc, eu commodo velit maximus vitae. Aliquam eleifend ex sit amet tortor suscipit tempus. Nullam venenatis porta rhoncus. Ut malesuada magna non mauris tincidunt commodo.`;
 
@@ -25,6 +27,12 @@ const DEFAULT_BUTTON_STYLE = {
   // },
 };
 
+const DEFAULT_MENU_ITEM_STYLE = {
+  color: 'white',
+  fontSize: 32,
+  fontFamily: 'OpenSansCondensed-Bold',
+};
+
 export default class CounterScene extends Scene {
   preload() {
     this.load.image('background', testBackground);
@@ -41,26 +49,29 @@ export default class CounterScene extends Scene {
         'OpenSansCondensed-Bold',
       ])
     );
+
+    console.log(' > this:', this);
+    // this.scene.add('menuScene', SimpleScene, false);
   }
 
-  create() {
-    this.createBackground()
-      // this.createEtherionLogo()
-      //   .then(this.createBackground)
-      .then(this.createGraphicsBackground)
-      .then(() => this.createFullscreenButton({ text: 'FS----' }))
-      .then(() => this.createSubtractButton({ onPointerUp: this.onSub }))
-      .then(() =>
-        this.createAsyncButton({ onPointerUp: this.onIncrementAsync })
-      )
-      .then(() => this.createCountText({ x: 100, y: 200 }))
-      .then(() => this.createCountText({ x: 200, y: 200 }))
-      .then(() => this.createAddButton({ onPointerUp: this.onAdd }))
-      .then(() =>
-        this.createAddButton({ x: 40, y: 400, onPointerUp: this.onAdd })
-      )
-      .then(this.createLogoImage)
-      .then(this.createNeedsUpdateNotification);
+  async create() {
+    // await this.createEtherionLogo();
+    await this.createBackground();
+    this.createGraphicsBackground();
+    this.createFullscreenButton({ text: 'FS----' });
+    this.createSubtractButton({ onPointerUp: this.onSub });
+    this.createAsyncButton({ onPointerUp: this.onIncrementAsync });
+    this.createCountText({ x: 100, y: 200 });
+    this.createCountText({ x: 200, y: 200 });
+    this.createAddButton({ onPointerUp: this.onAdd });
+    this.createAddButton({ x: 40, y: 400, onPointerUp: this.onAdd });
+    this.createLogoImage();
+    this.createNeedsUpdateNotification();
+    this.createNextSceneButton({
+      x: 630,
+      y: 250,
+      onPointerUp: this.swapScenes,
+    });
   }
 
   // Event handlers
@@ -79,6 +90,12 @@ export default class CounterScene extends Scene {
     incrementAsync(1)(store.dispatch, store.getState, undefined);
   };
 
+  swapScenes = () => {
+    console.log('Swap!  :');
+    this.scene.stop();
+    this.scene.start('menuScene');
+  };
+
   // Mixins
   preloadFonts = preloadFonts.bind(this);
   preloadLogoImage = preloadLogoImage.bind(this);
@@ -94,6 +111,32 @@ export default class CounterScene extends Scene {
   createCountText = createCountText.bind(this);
   createAddButton = createAddButton.bind(this);
   createNeedsUpdateNotification = createNeedsUpdateNotification.bind(this);
+  createNextSceneButton = createNextSceneButton.bind(this);
+}
+
+function createNextSceneButton(
+  this: Scene,
+  {
+    x = 250,
+    y = 250,
+    onPointerUp = () => {},
+    buttonStyle = DEFAULT_MENU_ITEM_STYLE,
+  }: { x?: number; y?: number; onPointerUp?: () => void; buttonStyle?: object }
+) {
+  const swapSceneButton = this.add.text(x, y, 'Next Scene', buttonStyle);
+  // swapSceneButton.alpha = 0;
+  swapSceneButton.setInteractive({ useHandCursor: true });
+  swapSceneButton.on('pointerup', onPointerUp);
+
+  // this.tweens.add({
+  //   targets: swapSceneButton,
+  //   alpha: { from: 0, to: 1 },
+  //   ease: 'Linear',
+  //   delay: 0,
+  //   duration: 1600,
+  //   repeat: 0,
+  //   yoyo: false,
+  // });
 }
 
 function createNeedsUpdateNotification(this: Scene) {
@@ -245,12 +288,12 @@ async function createBackground(this: Scene) {
   });
 }
 
-function preloadFonts(this: Scene, fonts: Set<string>) {
-  console.log('preloadFonts > fonts:', fonts);
-  const fontsArr = Array.from(fonts);
-  fontsArr.forEach((fontFamily) => {
-    this.add.text(0, -100, '', {
-      fontFamily,
-    });
-  });
-}
+// function preloadFonts(this: Scene, fonts: Set<string>) {
+//   console.log('preloadFonts > fonts:', fonts);
+//   const fontsArr = Array.from(fonts);
+//   fontsArr.forEach((fontFamily) => {
+//     this.add.text(0, -100, '', {
+//       fontFamily,
+//     });
+//   });
+// }

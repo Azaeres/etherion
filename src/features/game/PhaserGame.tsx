@@ -1,6 +1,8 @@
 import React from 'react';
 import Phaser from 'phaser';
+import SimpleScene from '../scenes/simple-scene';
 import CounterScene from '../counter/CounterScene';
+// import CounterScene from '../counter/CounterScene';
 
 export const GAME_WIDTH = 864;
 export const GAME_HEIGHT = 486;
@@ -14,14 +16,17 @@ export default class PhaserGame extends React.Component<IGameProps, any> {
       width: GAME_WIDTH,
       height: GAME_HEIGHT,
       parent: 'phaser-game',
-      scene: [CounterScene],
+      // scene: SimpleScene,
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
       },
     };
 
-    new Phaser.Game(config);
+    const game = new Phaser.Game(config);
+    game.scene.add('counterScene', CounterScene, false);
+    game.scene.add('menuScene', SimpleScene, false);
+    game.scene.start('menuScene');
   }
 
   shouldComponentUpdate() {
