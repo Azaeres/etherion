@@ -24,9 +24,8 @@ export default class PhaserGame extends React.Component<IGameProps, any> {
     };
 
     const game = new Phaser.Game(config);
+    game.scene.add('menuScene', SimpleScene, true);
     game.scene.add('counterScene', CounterScene, false);
-    game.scene.add('menuScene', SimpleScene, false);
-    game.scene.start('menuScene');
   }
 
   shouldComponentUpdate() {

@@ -1,16 +1,16 @@
-import { store } from '../../state/store';
+// import { store } from '../../state/store';
 import { Scene } from 'phaser';
 // import { decrement, increment, incrementAsync } from './counterState';
 
 import kairensTreeImage from '../../artwork/Kairens_tree.png';
 import preloadFonts from '../../util/preloadFonts';
-import CounterScene from '../counter/CounterScene';
+// import CounterScene from '../counter/CounterScene';
 // import createCountText, { countTextFonts } from './CountText';
 // import createLogoImage, { preloadLogoImage } from './LogoImage';
 // import createEtherionLogo, { preloadEtherionLogo } from './EtherionLogo';
 // import { selectNeedsUpdate } from '../../appState';
 
-const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in pellentesque purus. Nam eu finibus nibh. Ut porttitor vehicula tortor, id convallis orci porta sed. Pellentesque turpis tortor, faucibus eu placerat eu, tempor id nibh. Donec sollicitudin sem nunc, eu commodo velit maximus vitae. Aliquam eleifend ex sit amet tortor suscipit tempus. Nullam venenatis porta rhoncus. Ut malesuada magna non mauris tincidunt commodo.`;
+// const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in pellentesque purus. Nam eu finibus nibh. Ut porttitor vehicula tortor, id convallis orci porta sed. Pellentesque turpis tortor, faucibus eu placerat eu, tempor id nibh. Donec sollicitudin sem nunc, eu commodo velit maximus vitae. Aliquam eleifend ex sit amet tortor suscipit tempus. Nullam venenatis porta rhoncus. Ut malesuada magna non mauris tincidunt commodo.`;
 
 const DEFAULT_MENU_ITEM_STYLE = {
   // backgroundColor: 'white',
