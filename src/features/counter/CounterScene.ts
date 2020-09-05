@@ -9,8 +9,7 @@ import createLogoImage, { preloadLogoImage } from './LogoImage';
 import createEtherionLogo, { preloadEtherionLogo } from './EtherionLogo';
 import { selectNeedsUpdate } from '../../appState';
 import preloadFonts from '../../util/preloadFonts';
-// import moveCameraToScene from '../../util/moveCameraToScene';
-// import SimpleScene from '../scenes/simple-scene';
+import { version } from '../../../package.json';
 
 const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in pellentesque purus. Nam eu finibus nibh. Ut porttitor vehicula tortor, id convallis orci porta sed. Pellentesque turpis tortor, faucibus eu placerat eu, tempor id nibh. Donec sollicitudin sem nunc, eu commodo velit maximus vitae. Aliquam eleifend ex sit amet tortor suscipit tempus. Nullam venenatis porta rhoncus. Ut malesuada magna non mauris tincidunt commodo.`;
 
@@ -69,6 +68,7 @@ export default class CounterScene extends Scene {
       y: 250,
       onPointerUp: () => store.dispatch(navigate('SimpleScene')),
     });
+    this.createVersionText({ x: 818, y: 465 });
   }
 
   // Event handlers
@@ -113,6 +113,19 @@ export default class CounterScene extends Scene {
   createAddButton = createAddButton.bind(this);
   createNeedsUpdateNotification = createNeedsUpdateNotification.bind(this);
   createNextSceneButton = createNextSceneButton.bind(this);
+  createVersionText = createVersionText.bind(this);
+}
+
+function createVersionText(
+  this: Scene,
+  {
+    x = 100,
+    y = 100,
+    buttonStyle = { color: 'white', fontSize: 8 },
+  }: { x?: number; y?: number; buttonStyle?: object }
+) {
+  const versionText = this.add.text(x, y, `v${version}`, buttonStyle);
+  versionText.alpha = 0.7;
 }
 
 function createNextSceneButton(
