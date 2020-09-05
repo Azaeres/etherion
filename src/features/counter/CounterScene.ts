@@ -8,6 +8,7 @@ import createLogoImage, { preloadLogoImage } from './LogoImage';
 import createEtherionLogo, { preloadEtherionLogo } from './EtherionLogo';
 import { selectNeedsUpdate } from '../../appState';
 import preloadFonts from '../../util/preloadFonts';
+import moveCameraToScene from '../../util/moveCameraToScene';
 // import SimpleScene from '../scenes/simple-scene';
 
 const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in pellentesque purus. Nam eu finibus nibh. Ut porttitor vehicula tortor, id convallis orci porta sed. Pellentesque turpis tortor, faucibus eu placerat eu, tempor id nibh. Donec sollicitudin sem nunc, eu commodo velit maximus vitae. Aliquam eleifend ex sit amet tortor suscipit tempus. Nullam venenatis porta rhoncus. Ut malesuada magna non mauris tincidunt commodo.`;
@@ -70,7 +71,7 @@ export default class CounterScene extends Scene {
     this.createNextSceneButton({
       x: 630,
       y: 250,
-      onPointerUp: this.swapScenes,
+      onPointerUp: () => this.moveCameraToScene({ toSceneId: 'SimpleScene' }),
     });
   }
 
@@ -90,14 +91,18 @@ export default class CounterScene extends Scene {
     incrementAsync(1)(store.dispatch, store.getState, undefined);
   };
 
-  swapScenes = () => {
-    console.log('Swap!  :');
-    this.scene.stop();
-    this.scene.start('menuScene');
-  };
+  // swapScenes = () => {
+  //   console.log('Swap!  :');
+  //   // const label = Date.now().toString();
+  //   // console.time(label);
+  //   // this.scene.stop();
+  //   // this.scene.start('menuScene');
+  //   // console.timeEnd(label);
+  // };
 
   // Mixins
   preloadFonts = preloadFonts.bind(this);
+  moveCameraToScene = moveCameraToScene.bind(this);
   preloadLogoImage = preloadLogoImage.bind(this);
   preloadEtherionLogo = preloadEtherionLogo.bind(this);
 
