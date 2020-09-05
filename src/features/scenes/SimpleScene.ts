@@ -66,9 +66,9 @@ function createBackground(this: Scene) {
   const bg = this.add.image(0, 0, 'kairens-tree');
   bg.alpha = 0;
   bg.setOrigin(0, 0);
-  bg.scale = 0.3;
-  bg.x = 80;
-  bg.y = 20;
+  bg.scale = 0.4;
+  bg.x = 0;
+  bg.y = -70;
 
   return bg;
 }
