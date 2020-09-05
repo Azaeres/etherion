@@ -1,30 +1,32 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../state/store';
 import { Immutable } from '../../state/types';
+import { SceneIds } from '../scenes';
 
 type GameState = Immutable<{
-  camera: object;
+  camera: {
+    scene: SceneIds;
+  };
 }>;
 
 const initialState: GameState = {
-  camera: {},
+  camera: {
+    scene: 'SimpleScene',
+  },
 };
 
-export default {};
+export const gameSlice = createSlice({
+  name: 'game',
+  initialState,
+  reducers: {
+    navigate: (state, action: PayloadAction<SceneIds>) => {
+      state.camera.scene = action.payload;
+    },
+  },
+});
 
-// export const updateSlice = createSlice({
-//   name: 'app',
-//   initialState,
-//   reducers: {
-//     markNeedsUpdate: (state) => {
-//       state.needsUpdate = true;
-//     },
-//     markIsUpdated: (state) => {
-//       state.needsUpdate = false;
-//     },
-//   },
-// });
+export const { navigate } = gameSlice.actions;
 
-// export const { markNeedsUpdate, markIsUpdated } = updateSlice.actions;
-// export const selectNeedsUpdate = (state: RootState) => state.app.needsUpdate;
-// export default updateSlice.reducer;
+export const selectCurrentScene = (state: RootState) => state.game.camera.scene;
+
+export default gameSlice.reducer;

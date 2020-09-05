@@ -1,6 +1,7 @@
 import { store } from '../../state/store';
 import { Scene } from 'phaser';
 import { decrement, increment, incrementAsync } from './counterState';
+import { navigate } from '../game/gameState';
 
 import testBackground from '../../test_background.jpg';
 import createCountText, { countTextFonts } from './CountText';
@@ -8,7 +9,7 @@ import createLogoImage, { preloadLogoImage } from './LogoImage';
 import createEtherionLogo, { preloadEtherionLogo } from './EtherionLogo';
 import { selectNeedsUpdate } from '../../appState';
 import preloadFonts from '../../util/preloadFonts';
-import moveCameraToScene from '../../util/moveCameraToScene';
+// import moveCameraToScene from '../../util/moveCameraToScene';
 // import SimpleScene from '../scenes/simple-scene';
 
 const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in pellentesque purus. Nam eu finibus nibh. Ut porttitor vehicula tortor, id convallis orci porta sed. Pellentesque turpis tortor, faucibus eu placerat eu, tempor id nibh. Donec sollicitudin sem nunc, eu commodo velit maximus vitae. Aliquam eleifend ex sit amet tortor suscipit tempus. Nullam venenatis porta rhoncus. Ut malesuada magna non mauris tincidunt commodo.`;
@@ -40,24 +41,19 @@ export default class CounterScene extends Scene {
 
     this.preloadEtherionLogo();
     this.preloadLogoImage();
-    this.preloadFonts(
-      new Set([
-        ...countTextFonts,
-        'Oswald-ExtraLight',
-        'Oswald-Light',
-        'Oswald-Regular',
-        'Oswald-SemiBold',
-        'OpenSansCondensed-Bold',
-      ])
-    );
-
-    console.log(' > this:', this);
-    // this.scene.add('menuScene', SimpleScene, false);
+    this.preloadFonts([
+      ...countTextFonts,
+      'Oswald-ExtraLight',
+      'Oswald-Light',
+      'Oswald-Regular',
+      'Oswald-SemiBold',
+      'OpenSansCondensed-Bold',
+    ]);
   }
 
   async create() {
-    // await this.createEtherionLogo();
     await this.createBackground();
+    // this.createEtherionLogo();
     this.createGraphicsBackground();
     this.createFullscreenButton({ text: 'FS----' });
     this.createSubtractButton({ onPointerUp: this.onSub });
@@ -71,7 +67,7 @@ export default class CounterScene extends Scene {
     this.createNextSceneButton({
       x: 630,
       y: 250,
-      onPointerUp: () => this.moveCameraToScene({ toSceneId: 'SimpleScene' }),
+      onPointerUp: () => store.dispatch(navigate('SimpleScene')),
     });
   }
 
@@ -102,7 +98,7 @@ export default class CounterScene extends Scene {
 
   // Mixins
   preloadFonts = preloadFonts.bind(this);
-  moveCameraToScene = moveCameraToScene.bind(this);
+  // moveCameraToScene = moveCameraToScene.bind(this);
   preloadLogoImage = preloadLogoImage.bind(this);
   preloadEtherionLogo = preloadEtherionLogo.bind(this);
 

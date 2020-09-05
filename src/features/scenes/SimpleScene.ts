@@ -2,7 +2,9 @@ import { Scene } from 'phaser';
 
 import kairensTreeImage from '../../artwork/Kairens_tree.png';
 import preloadFonts from '../../util/preloadFonts';
-import moveCameraToScene from '../../util/moveCameraToScene';
+import { store } from '../../state/store';
+import { navigate } from '../game/gameState';
+// import moveCameraToScene from '../../util/moveCameraToScene';
 
 const DEFAULT_MENU_ITEM_STYLE = {
   color: 'white',
@@ -13,13 +15,7 @@ const DEFAULT_MENU_ITEM_STYLE = {
 export default class SimpleScene extends Scene {
   preload() {
     this.load.image('kairens-tree', kairensTreeImage);
-
-    // this.preloadEtherionLogo();
-    // this.preloadLogoImage();
-    this.preloadFonts(new Set(['OpenSansCondensed-Bold']));
-    // console.log(' > this.scene:', this.scene);
-
-    // this.scene.add('counterScene', CounterScene, false);
+    this.preloadFonts(['OpenSansCondensed-Bold']);
   }
 
   async create() {
@@ -27,7 +23,7 @@ export default class SimpleScene extends Scene {
     const swapSceneButton = this.createNextSceneButton({
       x: 630,
       y: 150,
-      onPointerUp: () => this.moveCameraToScene({ toSceneId: 'CounterScene' }),
+      onPointerUp: () => store.dispatch(navigate('CounterScene')),
     });
 
     this.tweens.add({
@@ -43,7 +39,7 @@ export default class SimpleScene extends Scene {
 
   // Mixins
   preloadFonts = preloadFonts.bind(this);
-  moveCameraToScene = moveCameraToScene.bind(this);
+  // moveCameraToScene = moveCameraToScene.bind(this);
 
   createBackground = createBackground.bind(this);
   createNextSceneButton = createNextSceneButton.bind(this);
