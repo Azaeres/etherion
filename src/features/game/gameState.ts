@@ -4,14 +4,17 @@ import { Immutable } from '../../state/types';
 import { SceneIds } from '../scenes';
 
 type GameState = Immutable<{
-  camera: {
-    scene: SceneIds;
-  };
+  camera: Camera;
+}>;
+
+export type Camera = Immutable<{
+  toScene: SceneIds;
+  props?: object;
 }>;
 
 const initialState: GameState = {
   camera: {
-    scene: 'SimpleScene',
+    toScene: 'SimpleScene',
   },
 };
 
@@ -19,14 +22,14 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    navigate: (state, action: PayloadAction<SceneIds>) => {
-      state.camera.scene = action.payload;
+    navigate: (state, action: PayloadAction<Camera>) => {
+      state.camera = action.payload;
     },
   },
 });
 
 export const { navigate } = gameSlice.actions;
 
-export const selectCurrentScene = (state: RootState) => state.game.camera.scene;
+export const selectCamera = (state: RootState) => state.game.camera;
 
 export default gameSlice.reducer;

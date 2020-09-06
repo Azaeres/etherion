@@ -13,6 +13,13 @@ const DEFAULT_MENU_ITEM_STYLE = {
 };
 
 export default class SimpleScene extends Scene {
+  init(data: { bar: string }) {
+    console.log('SimpleScene init - data:', data);
+
+    // this.imageID = data.id;
+    // this.imageFile = data.image;
+  }
+
   preload() {
     this.load.image('kairens-tree', kairensTreeImage);
     this.preloadFonts(['OpenSansCondensed-Bold']);
@@ -23,7 +30,10 @@ export default class SimpleScene extends Scene {
     const swapSceneButton = this.createNextSceneButton({
       x: 630,
       y: 150,
-      onPointerUp: () => store.dispatch(navigate('CounterScene')),
+      onPointerUp: () =>
+        store.dispatch(
+          navigate({ toScene: 'CounterScene', props: { foo: 'bar' } })
+        ),
     });
 
     this.tweens.add({

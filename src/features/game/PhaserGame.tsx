@@ -1,9 +1,9 @@
 import React from 'react';
 import Phaser from 'phaser';
 import moveCameraToScene from '../../util/moveCameraToScene';
-import { selectCurrentScene } from './gameState';
+import { selectCamera } from './gameState';
 import { store } from '../../state/store';
-import { SceneIds } from '../scenes';
+import { Camera } from '../game/gameState';
 
 export const GAME_WIDTH = 864;
 export const GAME_HEIGHT = 486;
@@ -26,14 +26,14 @@ export default class PhaserGame extends React.Component<IGameProps, any> {
 
     const game = new Phaser.Game(config);
 
-    let sceneId: SceneIds | void;
+    let camera: Camera | undefined;
     store.subscribe(() => {
-      const lastSceneId = sceneId;
+      const lastCamera = camera;
       const state = store.getState();
-      sceneId = selectCurrentScene(state);
+      camera = selectCamera(state);
       moveCameraToScene.call(game, {
-        fromSceneId: lastSceneId,
-        toSceneId: sceneId,
+        fromCamera: lastCamera,
+        toCamera: camera,
       });
     });
   }

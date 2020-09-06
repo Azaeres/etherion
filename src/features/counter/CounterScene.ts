@@ -34,7 +34,21 @@ const DEFAULT_MENU_ITEM_STYLE = {
   fontFamily: 'OpenSansCondensed-Bold',
 };
 
+type CounterSceneProps = { foo: string };
+
 export default class CounterScene extends Scene {
+  props: CounterSceneProps = { foo: 'foo' };
+  propText: Phaser.GameObjects.Text | undefined;
+  // propTextToggle: boolean = false;
+
+  init(data: { foo: string }) {
+    console.log('CounterScene init - data:', data);
+    this.props = data;
+
+    // this.imageID = data.id;
+    // this.imageFile = data.image;
+  }
+
   preload() {
     this.load.image('background', testBackground);
 
@@ -51,10 +65,12 @@ export default class CounterScene extends Scene {
   }
 
   async create() {
+    console.log('CounterScene create > this.props:', this.props);
+
     await this.createBackground();
     // this.createEtherionLogo();
     this.createGraphicsBackground();
-    this.createFullscreenButton({ text: 'FS----' });
+    this.createFullscreenButton({ text: `FS----` });
     this.createSubtractButton({ onPointerUp: this.onSub });
     this.createAsyncButton({ onPointerUp: this.onIncrementAsync });
     this.createCountText({ x: 100, y: 200 });
@@ -66,9 +82,48 @@ export default class CounterScene extends Scene {
     this.createNextSceneButton({
       x: 630,
       y: 250,
-      onPointerUp: () => store.dispatch(navigate('SimpleScene')),
+      onPointerUp: () =>
+        store.dispatch(
+          navigate({ toScene: 'SimpleScene', props: { bar: 'baz' } })
+        ),
     });
     this.createVersionText({ x: 818, y: 465 });
+    this.propText = this.createText({
+      x: 300,
+      y: 400,
+      text: this.props.foo,
+      style: { fontSize: 48 },
+      onPointerUp: () => {
+        const nextFoo = this.props.foo === 'bar' ? 'foo' : 'bar';
+        store.dispatch(
+          navigate({
+            toScene: 'CounterScene',
+            props: { foo: nextFoo },
+          })
+        );
+      },
+    });
+  }
+
+  propsDidChange(nextProps: CounterSceneProps) {
+    console.log('propsDidChange  > nextProps:', nextProps);
+    this.props = nextProps;
+    console.log(' > this.props:', this.props);
+    // console.log(' > this.propTextToggle:', this.propTextToggle);
+    if (this.propText) {
+      this.propText.text = this.props.foo;
+      // console.log('Setting text to  > this.props.foo:', this.props.foo);
+      // const nextFoo = this.props.foo === 'bar' ? 'foo' : 'bar';
+      // console.log('Setting nav to  > nextFoo:', nextFoo);
+      // this.propText.on('pointerup', () => {
+      //   store.dispatch(
+      //     navigate({
+      //       toScene: 'CounterScene',
+      //       props: { foo: nextFoo },
+      //     })
+      //   );
+      // });
+    }
   }
 
   // Event handlers
@@ -114,6 +169,33 @@ export default class CounterScene extends Scene {
   createNeedsUpdateNotification = createNeedsUpdateNotification.bind(this);
   createNextSceneButton = createNextSceneButton.bind(this);
   createVersionText = createVersionText.bind(this);
+  createText = createText.bind(this);
+}
+
+function createText(
+  this: Scene,
+  {
+    x = 100,
+    y = 100,
+    style = {},
+    text = '',
+    onPointerUp,
+  }: {
+    x?: number;
+    y?: number;
+    style?: object;
+    text: string;
+    onPointerUp?: () => void;
+  }
+) {
+  const defaultStyle = { color: 'white', fontSize: 12 };
+  const mergedStyles = { ...defaultStyle, ...style };
+  const sceneText = this.add.text(x, y, text, mergedStyles);
+  if (onPointerUp) {
+    sceneText.setInteractive({ useHandCursor: true });
+    sceneText.on('pointerup', onPointerUp);
+  }
+  return sceneText;
 }
 
 function createVersionText(
@@ -168,7 +250,7 @@ function createNeedsUpdateNotification(this: Scene) {
     }
   );
   needsUpdateNotificationText.alpha = alpha;
-  console.log(' > needsUpdateNotificationText:', needsUpdateNotificationText);
+  // console.log(' > needsUpdateNotificationText:', needsUpdateNotificationText);
 
   const unsubscribe = store.subscribe(() => {
     const state = store.getState();
