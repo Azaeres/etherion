@@ -1,11 +1,16 @@
-import { MigrationManifest } from 'redux-persist';
-import { RootState } from './store';
-import { migrateGameStateToGameStateV2 } from '../features/game/gameState';
+// import { MigrationManifest } from 'redux-persist';
+// import { RootState } from './store';
+// import { migrateGameStateToGameStateV2 } from '../features/game/gameState';
 
-const migrations: MigrationManifest = {
-  0: (state: RootState) => {
-    return { ...state, game: migrateGameStateToGameStateV2(state.game) };
-  },
+const migrations = {
+  // 0: (state: RootState) => {
+  //   return { ...state, game: migrateGameStateToGameStateV2(state.game) };
+  // },
+  // 1: (state: RootState) => {
+  //   const counter = state.counter;
+  //   delete counter.test;
+  //   return { ...state, counter };
+  // },
   // 0: (state: RootState) => {
   //   console.log('Running migration 0 > state:', state);
   //   const result = {

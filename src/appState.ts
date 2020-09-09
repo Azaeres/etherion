@@ -1,7 +1,7 @@
 import { createSlice, AnyAction } from '@reduxjs/toolkit';
 import { RootState } from './state/store';
 import { Immutable } from './state/types';
-import { REHYDRATE } from 'redux-persist';
+import { PERSIST_REHYDRATE } from '@redux-offline/redux-offline/lib/constants';
 
 type AppState = Immutable<{
   needsUpdate: boolean;
@@ -26,7 +26,8 @@ export const updateSlice = createSlice({
 
 function nonScopedReducer(state: RootState, action: AnyAction) {
   switch (action.type) {
-    case REHYDRATE:
+    case PERSIST_REHYDRATE:
+      console.log('PERSIST_REHYDRATE action caught  > action:', action);
       return { needsUpdate: false };
     default:
       return state;

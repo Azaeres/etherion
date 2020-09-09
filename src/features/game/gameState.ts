@@ -43,20 +43,20 @@ export type Camera = {
   props?: object;
 };
 
-export function migrateGameStateToGameStateV2(state: GameState): GameStateV2 {
-  const newCamera: CameraV2 = migrateCameraToCameraV2(state.camera);
-  return {
-    camera: newCamera,
-  };
-}
+// export function migrateGameStateToGameStateV2(state: GameState): GameStateV2 {
+//   const newCamera: CameraV2 = migrateCameraToCameraV2(state.camera);
+//   return {
+//     camera: newCamera,
+//   };
+// }
 
-function migrateCameraToCameraV2(camera: Camera): CameraV2 {
-  if (camera.props) {
-    return { scene: camera.toScene, props: camera.props };
-  } else {
-    return { scene: camera.toScene };
-  }
-}
+// function migrateCameraToCameraV2(camera: Camera): CameraV2 {
+//   if (camera.props) {
+//     return { scene: camera.toScene, props: camera.props };
+//   } else {
+//     return { scene: camera.toScene };
+//   }
+// }
 
 /* 
   {
