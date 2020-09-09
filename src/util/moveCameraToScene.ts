@@ -52,12 +52,8 @@ export default function moveCameraToScene(
       sceneImporter().then((value) => {
         const SceneClass: Scene = value.default;
         console.log(' > SceneClass:', SceneClass);
-        const nextScene = this.scene.add(toScene, SceneClass, false);
-        console.log(' > nextScene:', nextScene);
-        if (nextScene) {
-          fromCamera?.scene && this.scene.stop(fromCamera?.scene);
-          this.scene.start(toScene, toCamera.props);
-        }
+        this.scene.add(toScene, SceneClass, true, toCamera.props);
+        fromCamera?.scene && this.scene.stop(fromCamera?.scene);
       });
     }
     console.timeEnd(label);
