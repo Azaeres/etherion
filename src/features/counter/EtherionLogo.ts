@@ -27,7 +27,6 @@ export default async function createEtherionLogo(this: Scene) {
       repeat: 0,
       yoyo: false,
       onComplete: () => {
-        resolve();
         this.tweens.add({
           targets: etherionLogo,
           alpha: { from: 1, to: 0 },
@@ -37,6 +36,9 @@ export default async function createEtherionLogo(this: Scene) {
           duration: 200,
           repeat: 0,
           yoyo: false,
+          onComplete: () => {
+            resolve();
+          },
         });
       },
     });
