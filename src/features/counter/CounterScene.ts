@@ -84,7 +84,7 @@ export default class CounterScene extends Scene {
       y: 250,
       onPointerUp: () =>
         store.dispatch(
-          navigate({ toScene: 'SimpleScene', props: { bar: 'baz' } })
+          navigate({ scene: 'SimpleScene', props: { bar: 'baz' } })
         ),
     });
     this.createVersionText({ x: 818, y: 465 });
@@ -97,7 +97,7 @@ export default class CounterScene extends Scene {
         const nextFoo = this.props.foo === 'bar' ? 'foo' : 'bar';
         store.dispatch(
           navigate({
-            toScene: 'CounterScene',
+            scene: 'CounterScene',
             props: { foo: nextFoo },
           })
         );
@@ -112,17 +112,6 @@ export default class CounterScene extends Scene {
     // console.log(' > this.propTextToggle:', this.propTextToggle);
     if (this.propText) {
       this.propText.text = this.props.foo;
-      // console.log('Setting text to  > this.props.foo:', this.props.foo);
-      // const nextFoo = this.props.foo === 'bar' ? 'foo' : 'bar';
-      // console.log('Setting nav to  > nextFoo:', nextFoo);
-      // this.propText.on('pointerup', () => {
-      //   store.dispatch(
-      //     navigate({
-      //       toScene: 'CounterScene',
-      //       props: { foo: nextFoo },
-      //     })
-      //   );
-      // });
     }
   }
 
@@ -142,18 +131,8 @@ export default class CounterScene extends Scene {
     incrementAsync(1)(store.dispatch, store.getState, undefined);
   };
 
-  // swapScenes = () => {
-  //   console.log('Swap!  :');
-  //   // const label = Date.now().toString();
-  //   // console.time(label);
-  //   // this.scene.stop();
-  //   // this.scene.start('menuScene');
-  //   // console.timeEnd(label);
-  // };
-
   // Mixins
   preloadFonts = preloadFonts.bind(this);
-  // moveCameraToScene = moveCameraToScene.bind(this);
   preloadLogoImage = preloadLogoImage.bind(this);
   preloadEtherionLogo = preloadEtherionLogo.bind(this);
 

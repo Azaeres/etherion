@@ -1,6 +1,6 @@
 import { Game, Scene } from 'phaser';
 import { SceneImports } from '../features/scenes/index';
-import { Camera } from '../features/game/gameState';
+import { CameraV2 } from '../features/game/gameState';
 import { shallowEqual } from 'react-redux';
 // console.log(' > SceneImports:', SceneImports);
 
@@ -11,17 +11,25 @@ interface SceneProps {
 
 export default function moveCameraToScene(
   this: Game,
-  { fromCamera, toCamera }: { fromCamera: Camera | undefined; toCamera: Camera }
+  {
+    fromCamera,
+    toCamera,
+  }: { fromCamera: CameraV2 | undefined; toCamera: CameraV2 }
 ) {
-  if (fromCamera?.toScene === toCamera.toScene) {
-    console.log(' > fromCamera:', fromCamera);
-    console.log(' > toCamera:', toCamera);
-    const propsAreEqual = shallowEqual(fromCamera.props, toCamera.props);
+  console.log('moveCameraToScene > fromCamera:', fromCamera);
+  console.log(' > toCamera:', toCamera);
+  // console.log(' > oldToCamera:', oldToCamera);
+  const fromScene = fromCamera?.scene;
+  const toScene = toCamera.scene;
+  console.log(' > fromScene:', fromScene);
+  console.log(' > toScene:', toScene);
+  if (fromScene === toScene) {
+    const propsAreEqual = shallowEqual(fromCamera?.props, toCamera.props);
     console.log(' > propsAreEqual:', propsAreEqual);
     if (!propsAreEqual) {
-      const scene: SceneProps = this.scene.getScene(toCamera.toScene);
+      const scene: SceneProps = this.scene.getScene(toScene);
       console.log(' > scene:', scene);
-      scene.propsDidChange && scene.propsDidChange(toCamera.props);
+      scene && scene.propsDidChange && scene.propsDidChange(toCamera.props);
     }
   } else {
     console.log('Navigating fromCamera: ', fromCamera);
@@ -31,21 +39,24 @@ export default function moveCameraToScene(
     console.time(label);
 
     const keys: Record<string, any> = this.scene.keys;
-    const SceneClass = keys[toCamera.toScene];
+    const SceneClass = keys[toScene];
     if (SceneClass) {
       console.log('Scene already added  :');
-      fromCamera?.toScene && this.scene.stop(fromCamera?.toScene);
-      this.scene.start(toCamera.toScene, toCamera.props);
+      fromCamera?.scene && this.scene.stop(fromCamera?.scene);
+      this.scene.start(toScene, toCamera.props);
     } else {
       console.log('Scene not added yet. Adding scene dynamically... :');
       console.log(' > SceneImports:', SceneImports);
-      console.log(' > toCamera.toScene:', toCamera.toScene);
-      SceneImports[toCamera.toScene]().then((value) => {
+      console.log(' > toScene:', toScene);
+      const sceneImporter = SceneImports[toScene];
+      sceneImporter().then((value) => {
         const SceneClass: Scene = value.default;
-        const nextScene = this.scene.add(toCamera.toScene, SceneClass, false);
+        console.log(' > SceneClass:', SceneClass);
+        const nextScene = this.scene.add(toScene, SceneClass, false);
+        console.log(' > nextScene:', nextScene);
         if (nextScene) {
-          fromCamera?.toScene && this.scene.stop(fromCamera?.toScene);
-          this.scene.start(toCamera.toScene, toCamera.props);
+          fromCamera?.scene && this.scene.stop(fromCamera?.scene);
+          this.scene.start(toScene, toCamera.props);
         }
       });
     }

@@ -32,7 +32,7 @@ export default class SimpleScene extends Scene {
       y: 150,
       onPointerUp: () =>
         store.dispatch(
-          navigate({ toScene: 'CounterScene', props: { foo: 'bar' } })
+          navigate({ scene: 'CounterScene', props: { foo: 'bar' } })
         ),
     });
 

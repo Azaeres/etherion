@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, AnyAction } from '@reduxjs/toolkit';
 import { RootState } from './state/store';
 import { Immutable } from './state/types';
+import { REHYDRATE } from 'redux-persist';
 
 type AppState = Immutable<{
   needsUpdate: boolean;
@@ -23,6 +24,19 @@ export const updateSlice = createSlice({
   },
 });
 
+function nonScopedReducer(state: RootState, action: AnyAction) {
+  switch (action.type) {
+    case REHYDRATE:
+      return { needsUpdate: false };
+    default:
+      return state;
+  }
+}
+
+function combinedReducer(state: RootState, action: AnyAction) {
+  return nonScopedReducer(updateSlice.reducer(state, action), action);
+}
+
 export const { markNeedsUpdate, markIsUpdated } = updateSlice.actions;
 export const selectNeedsUpdate = (state: RootState) => state.app.needsUpdate;
-export default updateSlice.reducer;
+export default combinedReducer;
