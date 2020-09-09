@@ -1,5 +1,7 @@
 import { Scene } from 'phaser';
 import etherionLogo from '../../etherion_logo-3.png';
+import { store } from '../../state/store';
+import { navigate } from '../game/gameState';
 
 export function preloadLogoImage(this: Scene) {
   this.load.image('LogoImage_etherionLogo', etherionLogo);
@@ -15,6 +17,7 @@ export default function createLogoImage(this: Scene) {
   logo.setInteractive({ useHandCursor: true });
   logo.on('pointerup', () => {
     console.log('click logo  :');
+    store.dispatch(navigate({ scene: 'LogoScene' }));
   });
   this.tweens.add({
     targets: logo,

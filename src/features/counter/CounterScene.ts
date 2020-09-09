@@ -6,7 +6,7 @@ import { navigate } from '../game/gameState';
 import testBackground from '../../test_background.jpg';
 import createCountText, { countTextFonts } from './CountText';
 import createLogoImage, { preloadLogoImage } from './LogoImage';
-import createEtherionLogo, { preloadEtherionLogo } from './EtherionLogo';
+// import createEtherionLogo, { preloadEtherionLogo } from './EtherionLogo';
 import { selectNeedsUpdate } from '../../appState';
 import preloadFonts from '../../util/preloadFonts';
 import { version } from '../../../package.json';
@@ -52,7 +52,7 @@ export default class CounterScene extends Scene {
   preload() {
     this.load.image('background', testBackground);
 
-    this.preloadEtherionLogo();
+    // this.preloadEtherionLogo();
     this.preloadLogoImage();
     this.preloadFonts([
       ...countTextFonts,
@@ -134,9 +134,9 @@ export default class CounterScene extends Scene {
   // Mixins
   preloadFonts = preloadFonts.bind(this);
   preloadLogoImage = preloadLogoImage.bind(this);
-  preloadEtherionLogo = preloadEtherionLogo.bind(this);
+  // preloadEtherionLogo = preloadEtherionLogo.bind(this);
 
-  createEtherionLogo = createEtherionLogo.bind(this);
+  // createEtherionLogo = createEtherionLogo.bind(this);
   createBackground = createBackground.bind(this);
   createLogoImage = createLogoImage.bind(this);
   createGraphicsBackground = createGraphicsBackground.bind(this);
