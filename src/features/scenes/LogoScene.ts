@@ -21,7 +21,7 @@ export default class LogoScene extends Scene {
 
   async create() {
     await this.createEtherionLogo();
-    store.dispatch(navigate({ scene: 'SimpleScene' }));
+    store.dispatch(navigate({ sceneId: 'SimpleScene' }));
     // const bg = this.createBackground();
     // const swapSceneButton = this.createNextSceneButton({
     //   x: 630,

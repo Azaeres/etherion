@@ -82,10 +82,11 @@ export default class CounterScene extends Scene {
     this.createNextSceneButton({
       x: 630,
       y: 250,
-      onPointerUp: () =>
-        store.dispatch(
-          navigate({ scene: 'SimpleScene', props: { bar: 'baz' } })
-        ),
+      onPointerUp: async () => {
+        return store.dispatch(
+          navigate({ sceneId: 'SimpleScene', props: { bar: 'baz' } })
+        );
+      },
     });
     this.createVersionText({ x: 818, y: 465 });
     this.propText = this.createText({
@@ -97,7 +98,7 @@ export default class CounterScene extends Scene {
         const nextFoo = this.props.foo === 'bar' ? 'foo' : 'bar';
         store.dispatch(
           navigate({
-            scene: 'CounterScene',
+            sceneId: 'CounterScene',
             props: { foo: nextFoo },
           })
         );
@@ -195,14 +196,30 @@ function createNextSceneButton(
   {
     x = 250,
     y = 250,
-    onPointerUp = () => {},
+    onPointerUp,
     buttonStyle = DEFAULT_MENU_ITEM_STYLE,
-  }: { x?: number; y?: number; onPointerUp?: () => void; buttonStyle?: object }
+  }: {
+    x?: number;
+    y?: number;
+    onPointerUp?: () => Promise<any>;
+    buttonStyle?: object;
+  }
 ) {
   const swapSceneButton = this.add.text(x, y, 'Next Scene', buttonStyle);
   // swapSceneButton.alpha = 0;
   swapSceneButton.setInteractive({ useHandCursor: true });
-  swapSceneButton.on('pointerup', onPointerUp);
+
+  onPointerUp &&
+    swapSceneButton.on('pointerup', async (...args: any) => {
+      const t0 = performance.now();
+      swapSceneButton.alpha = 0.3;
+
+      await onPointerUp.apply(this, args);
+      swapSceneButton.alpha = 1;
+      const t1 = performance.now();
+      const ms = t1 - t0;
+      console.log('Done > ms:', ms);
+    });
 
   // this.tweens.add({
   //   targets: swapSceneButton,
@@ -271,12 +288,17 @@ function createAsyncButton(
     DEFAULT_BUTTON_STYLE
   );
   addAsyncButton.setInteractive({ useHandCursor: true });
+  let count = 0;
   addAsyncButton.on('pointerup', async (...args: any) => {
     console.log('on pointerup  > args:', args);
     addAsyncButton.alpha = 0.3;
+    count++;
     const res = await onPointerUp.apply(this, args);
+    count--;
     console.log('event! > res:', res);
-    addAsyncButton.alpha = 1;
+    if (count === 0) {
+      addAsyncButton.alpha = 1;
+    }
   });
   addAsyncButton.setShadow(0, 4, '#333', 6, false, true);
 }

@@ -1,70 +1,98 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../state/store';
+import { createSlice, PayloadAction, AnyAction } from '@reduxjs/toolkit';
+import { RootState, AppThunk, store } from '../../state/store';
 import { SceneIds } from '../scenes';
+import moveCameraToScene from '../../util/moveCameraToScene';
+import { PERSIST_REHYDRATE } from '@redux-offline/redux-offline/lib/constants';
+import { game } from './PhaserGame';
 
-type GameStateV2 = {
-  camera: CameraV2;
+export type GameState = {
+  camera: Camera;
 };
 
-export type CameraV2 = {
-  scene: SceneIds;
+export type Camera = {
+  currentScene?: SceneVariant;
+  lastScene?: SceneVariant;
+};
+
+export type SceneVariant = {
+  sceneId: SceneIds;
   props?: object;
 };
 
-const initialState: GameStateV2 = {
-  camera: {
-    scene: 'SimpleScene',
-  },
+const initialState: GameState = {
+  camera: {},
 };
 
 export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    navigate: (state: GameStateV2, action: PayloadAction<CameraV2>) => {
+    navigate: (state: GameState, action: PayloadAction<SceneVariant>) => {
       console.log('Navigate reducer  :');
-      state.camera = action.payload;
+      const lastScene = state.camera.currentScene;
+      state.camera.currentScene = action.payload;
+      state.camera.lastScene = lastScene;
     },
   },
 });
 
-export const { navigate } = gameSlice.actions;
+export const selectCurrentScene = (state: RootState): SceneVariant =>
+  state.game.camera.currentScene;
 
-export const selectCamera = (state: RootState): CameraV2 => state.game.camera;
+export default combinedReducer;
 
-export default gameSlice.reducer;
+function combinedReducer(state: RootState, action: AnyAction) {
+  return nonScopedReducer(gameSlice.reducer(state, action), action);
+}
 
-type GameState = {
-  camera: Camera;
-};
-
-export type Camera = {
-  toScene: SceneIds;
-  props?: object;
-};
-
-// export function migrateGameStateToGameStateV2(state: GameState): GameStateV2 {
-//   const newCamera: CameraV2 = migrateCameraToCameraV2(state.camera);
-//   return {
-//     camera: newCamera,
-//   };
-// }
-
-// function migrateCameraToCameraV2(camera: Camera): CameraV2 {
-//   if (camera.props) {
-//     return { scene: camera.toScene, props: camera.props };
-//   } else {
-//     return { scene: camera.toScene };
-//   }
-// }
-
-/* 
-  {
-    "camera": {
-      "toScene": "CounterScene",
-      "props": {
-        "foo": "bar"
-      }
-    }
+function nonScopedReducer(state: RootState, action: AnyAction) {
+  switch (action.type) {
+    case PERSIST_REHYDRATE:
+      console.log('PERSIST_REHYDRATE  > state:', state);
+      // const toScene: SceneVariant = state.camera.currentScene;
+      // console.log(' > toScene:', toScene);
+      setTimeout(() => {
+        const state = store.getState();
+        const currentScene: SceneVariant = selectCurrentScene(state);
+        console.log(' > currentScene:', currentScene);
+        if (currentScene) {
+          moveCameraToScene.call(game, {
+            fromScene: undefined,
+            toScene: currentScene,
+          });
+        } else {
+          const defaultScene: SceneVariant = { sceneId: 'SimpleScene' };
+          moveCameraToScene.call(game, {
+            fromScene: undefined,
+            toScene: defaultScene,
+          });
+        }
+      }, 0);
+      return state;
+    default:
+      return state;
   }
-*/
+}
+
+const { navigate: _navigate } = gameSlice.actions;
+
+export const navigate = (toScene: SceneVariant): AppThunk => (
+  dispatch,
+  getState: () => any
+) => {
+  console.log('navigate :');
+  const state = getState();
+  console.log(' > state:', state);
+  console.log(' > toScene:', toScene);
+  const fromScene = state.game.camera.currentScene;
+  console.log(' > fromScene:', fromScene);
+
+  return moveCameraToScene
+    .call(game, {
+      fromScene,
+      toScene,
+    })
+    .then(() => {
+      return dispatch(_navigate(toScene));
+    });
+};

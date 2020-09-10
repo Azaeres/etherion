@@ -31,11 +31,11 @@ export default function createMigration(
   versionSelector_?: string | Function,
   versionSetter_?: Function
 ) {
-  console.log(
-    'createMigration  > manifest, versionSelector_:',
-    manifest,
-    versionSelector_
-  );
+  // console.log(
+  //   'createMigration  > manifest, versionSelector_:',
+  //   manifest,
+  //   versionSelector_
+  // );
   let _versionSelector: Function;
   let _versionSetter: Function;
   if (typeof versionSelector_ === 'string') {
@@ -65,7 +65,7 @@ export default function createMigration(
   console.log(' > currentVersion:', currentVersion);
 
   const migrationDispatch = (next: Dispatch) => (action: AnyAction) => {
-    console.log('Migration reducer  > action:', action);
+    // console.log('Migration reducer  > action:', action);
     if (action.type === PERSIST_REHYDRATE) {
       const incomingState = action.payload;
       console.log(' > incomingState:', incomingState);
@@ -85,7 +85,7 @@ export default function createMigration(
   };
 
   const migrate = (state: RootState, version: number | null): RootState => {
-    console.log('migrate  > state, version:', state, version);
+    // console.log('migrate  > state, version:', state, version);
     versionKeys
       .filter((v) => version === null || v > version)
       .forEach((v) => {
@@ -102,17 +102,17 @@ export default function createMigration(
     initialState: RootState,
     enhancer: any
   ): Store<T> => {
-    console.trace('migration enhance :');
-    console.log(
-      ' > reducer, initialState, enhancer:',
-      reducer,
-      initialState,
-      enhancer
-    );
+    // console.trace('migration enhance :');
+    // console.log(
+    //   ' > reducer, initialState, enhancer:',
+    //   reducer,
+    //   initialState,
+    //   enhancer
+    // );
     const store = next(reducer, initialState, enhancer);
-    console.log(' > store:', store);
+    // console.log(' > store:', store);
     const dispatch = migrationDispatch(store.dispatch);
-    console.log(' > migrationDispatch:', migrationDispatch);
+    // console.log(' > migrationDispatch:', migrationDispatch);
     return {
       ...store,
       dispatch,

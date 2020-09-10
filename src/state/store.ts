@@ -13,27 +13,10 @@ import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
 import counterReducer from '../features/counter/counterState';
 import appReducer from '../appState';
 import gameReducer from '../features/game/gameState';
-// import {
-//   persistStore,
-//   persistReducer,
-//   createMigrate,
-//   Persistor,
-// } from 'redux-persist';
-// import storage from 'redux-persist/lib/storage';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import createMigration from './createMigration';
 
-// import * as constants from 'redux-persist/es/constants'
-// import constants from 'redux-persist/lib/constants'
-// import createMigration from 'redux-persist-migrate';
-// import * as reduxPersistMigrate from 'redux-persist-migrate';
-// import * as constants from 'redux-persist'
-
-// console.log(' > reduxPersistMigrate:', reduxPersistMigrate);
-
 import manifest from './migrations';
-// import * as reduxPersist from 'redux-persist';
-// console.log(' > reduxPersist:', reduxPersist);
 
 type DispatchFunctionType = ThunkDispatch<RootState, undefined, AnyAction>;
 
@@ -48,34 +31,8 @@ type DispatchFunctionType = ThunkDispatch<RootState, undefined, AnyAction>;
 // In this example after migrations run, `state.app.version` will equal `2`
 const VERSION_REDUCER_KEY = 'migration';
 
-// const persistConfig = {
-//   key: 'root',
-//   storage,
-//   debug: true,
-//   version: 0,
-//   migrate: createMigrate(migrations, { debug: true }),
-// };
+const migration = createMigration(manifest, VERSION_REDUCER_KEY);
 
-// console.log(' > offlineConfig:', offlineConfig);
-
-// let persistor: Persistor;
-
-const migration = createMigration(
-  manifest,
-  VERSION_REDUCER_KEY
-  // (state: any) => state[VERSION_REDUCER_KEY].version,
-  // (state: any, version: number) => {
-  //   return {
-  //     ...state,
-  //     [VERSION_REDUCER_KEY]: {
-  //       ...state[VERSION_REDUCER_KEY],
-  //       version: version,
-  //     },
-  //   };
-  // }
-);
-
-// Type fix:
 const {
   enhanceReducer: offlineEnhanceReducer,
   enhanceStore: offlineEnhanceStore,
@@ -93,11 +50,6 @@ const combinedReducers = combineReducers({
   counter: counterReducer,
 });
 
-// const persistedReducer = persistReducer(
-//   persistConfig,
-//   offlineEnhanceReducer(combinedReducers)
-// );
-
 const enhancer: any = compose(offlineEnhanceStore, migration);
 
 const middleware = [thunk, offlineMiddleware];
@@ -110,21 +62,6 @@ export const store: Store<any, Action<any>> & {
   middleware,
   enhancers: [enhancer],
 });
-
-// store.dispatch({ type: 'foo' });
-
-// export const persistor: Persistor = persistStore(
-//   store /*, null, () => {
-//   console.log('persist rehydrated! :');
-//   // store.dispatch(markIsUpdated());
-//   // store.dispatch(migrate());
-// } */
-// );
-
-// console.log(' > persistor:', persistor);
-
-// const currentState = store.getState();
-// console.log(' > currentState:', currentState);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppThunk<ReturnType = void> = ThunkAction<

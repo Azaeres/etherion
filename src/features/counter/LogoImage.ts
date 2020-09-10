@@ -17,7 +17,7 @@ export default function createLogoImage(this: Scene) {
   logo.setInteractive({ useHandCursor: true });
   logo.on('pointerup', () => {
     console.log('click logo  :');
-    store.dispatch(navigate({ scene: 'LogoScene' }));
+    store.dispatch(navigate({ sceneId: 'LogoScene' }));
   });
   this.tweens.add({
     targets: logo,
