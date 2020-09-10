@@ -127,8 +127,9 @@ export default class CounterScene extends Scene {
     store.dispatch(action);
   };
 
-  onIncrementAsync = () => {
-    incrementAsync(1)(store.dispatch, store.getState, undefined);
+  onIncrementAsync = async () => {
+    console.log('onIncrementAsync  :');
+    return await store.dispatch(incrementAsync(1));
   };
 
   // Mixins
@@ -261,7 +262,7 @@ function createAddButton(
 
 function createAsyncButton(
   this: Scene,
-  { onPointerUp = () => {} }: { onPointerUp: () => void }
+  { onPointerUp = () => {} }: { onPointerUp: () => Promise<any> | void }
 ) {
   const addAsyncButton = this.add.text(
     285,
@@ -270,7 +271,13 @@ function createAsyncButton(
     DEFAULT_BUTTON_STYLE
   );
   addAsyncButton.setInteractive({ useHandCursor: true });
-  addAsyncButton.on('pointerup', onPointerUp);
+  addAsyncButton.on('pointerup', async (...args: any) => {
+    console.log('on pointerup  > args:', args);
+    addAsyncButton.alpha = 0.3;
+    const res = await onPointerUp.apply(this, args);
+    console.log('event! > res:', res);
+    addAsyncButton.alpha = 1;
+  });
   addAsyncButton.setShadow(0, 4, '#333', 6, false, true);
 }
 

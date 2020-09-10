@@ -5,6 +5,7 @@ import {
   Store,
   combineReducers,
   compose,
+  AnyAction,
 } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { createOffline } from '@redux-offline/redux-offline';
@@ -19,7 +20,7 @@ import gameReducer from '../features/game/gameState';
 //   Persistor,
 // } from 'redux-persist';
 // import storage from 'redux-persist/lib/storage';
-import thunk from 'redux-thunk';
+import thunk, { ThunkDispatch } from 'redux-thunk';
 import createMigration from './createMigration';
 
 // import * as constants from 'redux-persist/es/constants'
@@ -33,6 +34,8 @@ import createMigration from './createMigration';
 import manifest from './migrations';
 // import * as reduxPersist from 'redux-persist';
 // console.log(' > reduxPersist:', reduxPersist);
+
+type DispatchFunctionType = ThunkDispatch<RootState, undefined, AnyAction>;
 
 // Encountered incompatibility between `redux-offline` and `redux-persist` v6.
 // Errors generated persisting to/from storage.
@@ -100,13 +103,15 @@ const enhancer: any = compose(offlineEnhanceStore, migration);
 const middleware = [thunk, offlineMiddleware];
 process.env.NODE_ENV === 'development' && middleware.push(logger);
 
-export const store: Store = configureStore({
+export const store: Store<any, Action<any>> & {
+  dispatch: DispatchFunctionType;
+} = configureStore({
   reducer: offlineEnhanceReducer(combinedReducers),
   middleware,
   enhancers: [enhancer],
 });
 
-store.dispatch({ type: 'foo' });
+// store.dispatch({ type: 'foo' });
 
 // export const persistor: Persistor = persistStore(
 //   store /*, null, () => {

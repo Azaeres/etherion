@@ -4,8 +4,6 @@ import { Dispatch, AnyAction, Store } from 'redux';
 import { RootState } from './store';
 import { Reducer } from 'react';
 
-console.log(' > PERSIST_REHYDRATE:', PERSIST_REHYDRATE);
-
 export type PersistState = {
   version: number;
   rehydrated: boolean;
@@ -100,7 +98,7 @@ export default function createMigration(
   };
 
   return (next: any) => <T extends { [key: string]: any }>(
-    reducer: Reducer<RootState, AnyAction>,
+    reducer: Reducer<RootState, any>,
     initialState: RootState,
     enhancer: any
   ): Store<T> => {
