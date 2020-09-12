@@ -1,6 +1,6 @@
 import { Game, Scene } from 'phaser';
-import { SceneImports } from '../features/scenes/index';
-import { SceneVariant } from '../features/game/gameState';
+import { SceneImports } from '../components/scenes/index';
+import { SceneVariant } from '../components/game/gameState';
 import { shallowEqual } from 'react-redux';
 // console.log(' > SceneImports:', SceneImports);
 

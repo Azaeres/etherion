@@ -1,4 +1,4 @@
-import { increment } from './features/counter/counterState';
+import { increment } from './components/counter/counterState';
 import { store } from './state/store';
 
 // Global types declared in `./globals.d.ts`

@@ -10,6 +10,10 @@ import createLogoImage, { preloadLogoImage } from './LogoImage';
 import { selectNeedsUpdate } from '../../appState';
 import preloadFonts from '../../util/preloadFonts';
 import { version } from '../../../package.json';
+import TextButton from '../TextButton';
+// import TextButton from '../TextButton';
+// import TextButton from '../TextButton';
+// import createButton from '../Button';
 
 const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in pellentesque purus. Nam eu finibus nibh. Ut porttitor vehicula tortor, id convallis orci porta sed. Pellentesque turpis tortor, faucibus eu placerat eu, tempor id nibh. Donec sollicitudin sem nunc, eu commodo velit maximus vitae. Aliquam eleifend ex sit amet tortor suscipit tempus. Nullam venenatis porta rhoncus. Ut malesuada magna non mauris tincidunt commodo.`;
 
@@ -28,17 +32,17 @@ const DEFAULT_BUTTON_STYLE = {
   // },
 };
 
-const DEFAULT_MENU_ITEM_STYLE = {
-  color: 'white',
-  fontSize: 32,
-  fontFamily: 'OpenSansCondensed-Bold',
-};
+// const DEFAULT_MENU_ITEM_STYLE = {
+//   color: 'white',
+//   fontSize: 32,
+//   fontFamily: 'OpenSansCondensed-Bold',
+// };
 
 type CounterSceneProps = { foo: string };
 
 export default class CounterScene extends Scene {
   props: CounterSceneProps = { foo: 'foo' };
-  propText: Phaser.GameObjects.Text | undefined;
+  propText?: TextButton;
   // propTextToggle: boolean = false;
 
   init(data: { foo: string }) {
@@ -75,26 +79,51 @@ export default class CounterScene extends Scene {
     this.createAsyncButton({ onPointerUp: this.onIncrementAsync });
     this.createCountText({ x: 100, y: 200 });
     this.createCountText({ x: 200, y: 200 });
-    this.createAddButton({ onPointerUp: this.onAdd });
+    this.createAddButton({ x: 400, y: 200, onPointerUp: this.onAdd });
     this.createAddButton({ x: 40, y: 400, onPointerUp: this.onAdd });
     this.createLogoImage();
     this.createNeedsUpdateNotification();
-    this.createNextSceneButton({
-      x: 630,
-      y: 250,
-      onPointerUp: async () => {
+    const nextSceneButton = new TextButton({
+      scene: this,
+      x: 680,
+      y: 300,
+      text: 'Next Scene',
+      action: async () => {
         return store.dispatch(
           navigate({ sceneId: 'SimpleScene', props: { bar: 'baz' } })
         );
       },
+      disabled: true,
     });
+    this.add.existing(nextSceneButton);
+
+    let toggleDisabled = true;
+    const disableToggleButton = new TextButton({
+      scene: this,
+      x: 680,
+      y: 360,
+      text: 'Enable',
+      action: () => {
+        toggleDisabled = !toggleDisabled;
+        if (toggleDisabled) {
+          nextSceneButton.disable();
+          disableToggleButton.setText('Enable');
+        } else {
+          nextSceneButton.enable();
+          disableToggleButton.setText('Disable');
+        }
+      },
+    });
+    this.add.existing(disableToggleButton);
+
     this.createVersionText({ x: 818, y: 465 });
-    this.propText = this.createText({
+    this.propText = new TextButton({
+      scene: this,
       x: 300,
       y: 400,
       text: this.props.foo,
       style: { fontSize: 48 },
-      onPointerUp: () => {
+      action: () => {
         const nextFoo = this.props.foo === 'bar' ? 'foo' : 'bar';
         store.dispatch(
           navigate({
@@ -104,6 +133,7 @@ export default class CounterScene extends Scene {
         );
       },
     });
+    this.add.existing(this.propText);
   }
 
   propsDidChange(nextProps: CounterSceneProps) {
@@ -148,7 +178,7 @@ export default class CounterScene extends Scene {
   createCountText = createCountText.bind(this);
   createAddButton = createAddButton.bind(this);
   createNeedsUpdateNotification = createNeedsUpdateNotification.bind(this);
-  createNextSceneButton = createNextSceneButton.bind(this);
+  // createButton = createButton.bind(this);
   createVersionText = createVersionText.bind(this);
   createText = createText.bind(this);
 }
@@ -191,46 +221,119 @@ function createVersionText(
   versionText.alpha = 0.7;
 }
 
-function createNextSceneButton(
-  this: Scene,
-  {
-    x = 250,
-    y = 250,
-    onPointerUp,
-    buttonStyle = DEFAULT_MENU_ITEM_STYLE,
-  }: {
-    x?: number;
-    y?: number;
-    onPointerUp?: () => Promise<any>;
-    buttonStyle?: object;
-  }
-) {
-  const swapSceneButton = this.add.text(x, y, 'Next Scene', buttonStyle);
-  // swapSceneButton.alpha = 0;
-  swapSceneButton.setInteractive({ useHandCursor: true });
+// interface PointerWithTarget extends Phaser.Input.Pointer {
+//   target?: any;
+// }
 
-  onPointerUp &&
-    swapSceneButton.on('pointerup', async (...args: any) => {
-      const t0 = performance.now();
-      swapSceneButton.alpha = 0.3;
+// function createNextSceneButton(
+//   this: Scene,
+//   {
+//     x = 250,
+//     y = 250,
+//     onPointerUp,
+//     buttonStyle = DEFAULT_MENU_ITEM_STYLE,
+//     disabled = true,
+//   }: {
+//     x?: number;
+//     y?: number;
+//     onPointerUp?: () => Promise<any>;
+//     buttonStyle?: object;
+//     disabled?: boolean;
+//   }
+// ) {
+//   let _disabled = disabled;
+//   const swapSceneButton = this.add.text(x, y, 'Next Scene', buttonStyle);
+//   // swapSceneButton.alpha = 0;
+//   if (disabled) {
+//     swapSceneButton.alpha = 0.3;
+//   } else {
+//     swapSceneButton.setInteractive({ useHandCursor: true });
+//   }
+//   // swapSceneButton.setSize(200, 50);
+//   // swapSceneButton.originX = 1.0;
 
-      await onPointerUp.apply(this, args);
-      swapSceneButton.alpha = 1;
-      const t1 = performance.now();
-      const ms = t1 - t0;
-      console.log('Done > ms:', ms);
-    });
+//   const disable = () => {
+//     _disabled = true;
+//     swapSceneButton.alpha = 0.3;
+//     swapSceneButton.setInteractive({ useHandCursor: false });
+//     release();
+//   };
 
-  // this.tweens.add({
-  //   targets: swapSceneButton,
-  //   alpha: { from: 0, to: 1 },
-  //   ease: 'Linear',
-  //   delay: 0,
-  //   duration: 1600,
-  //   repeat: 0,
-  //   yoyo: false,
-  // });
-}
+//   const enable = () => {
+//     _disabled = false;
+//     swapSceneButton.alpha = 1;
+//     swapSceneButton.setInteractive({ useHandCursor: true });
+//   };
+
+//   // let _depressedTarget: Phaser.GameObjects.Text;
+//   const depress = (pointer: PointerWithTarget) => {
+//     // const currentTarget = pointer.event.currentTarget;
+//     // console.log(' > currentTarget:', currentTarget);
+//     console.log('depress  > swapSceneButton:', swapSceneButton);
+//     // _depressedTarget = swapSceneButton;
+//     console.log(' > pointer:', pointer);
+//     console.log(' > pointer:', pointer);
+//     pointer.target = swapSceneButton;
+//     if (!_disabled) {
+//       // _depressedTarget = swapSceneButton;
+//       swapSceneButton.scale = 0.98;
+//     }
+//   };
+
+//   const release = () => {
+//     swapSceneButton.scale = 1.0;
+//   };
+
+//   swapSceneButton.on('pointerdown', depress);
+//   swapSceneButton.on('pointerup', release);
+//   swapSceneButton.on('pointerout', release);
+//   swapSceneButton.on('pointerover', (pointer: PointerWithTarget) => {
+//     if (pointer.target === swapSceneButton) {
+//       if (pointer.noButtonDown()) {
+//         release();
+//       } else {
+//         depress(pointer);
+//       }
+//     }
+//   });
+
+//   onPointerUp &&
+//     swapSceneButton.on('pointerup', async (...args: any) => {
+//       const [pointer] = args;
+//       if (pointer.target === swapSceneButton) {
+//         const t0 = performance.now();
+//         // swapSceneButton.scale = 0.9;
+
+//         // Disabled for testing purposes...
+//         await onPointerUp.apply(this, args);
+//         // console.log('Navigation placeholder  :');
+//         // // console.log(' > args:', args);
+//         // console.log(' > pointer:', pointer);
+//         // console.log(' > swapSceneButton:', swapSceneButton);
+
+//         // swapSceneButton.scale = 1;
+//         const t1 = performance.now();
+//         const ms = t1 - t0;
+//         console.log('Done > ms:', ms);
+//       }
+//     });
+
+//   return {
+//     disable,
+//     enable,
+//     isDisabled: () => _disabled,
+//   };
+
+//   // this.tweens.add({
+//   //   targets: swapSceneButton,
+//   //   alpha: { from: 0, to: 1 },
+//   //   ease: 'Linear',
+//   //   delay: 0,
+//   //   duration: 1600,
+//   //   repeat: 0,
+//   //   yoyo: false,
+//   // });
+// }
 
 function createNeedsUpdateNotification(this: Scene) {
   const state = store.getState();
@@ -272,51 +375,59 @@ function createAddButton(
     buttonStyle = DEFAULT_BUTTON_STYLE,
   }: { x?: number; y?: number; onPointerUp?: () => void; buttonStyle?: object }
 ) {
-  const addButton = this.add.text(x, y, '+', buttonStyle);
-  addButton.setInteractive({ useHandCursor: true });
-  addButton.on('pointerup', onPointerUp);
+  const addButton = new TextButton({
+    scene: this,
+    x,
+    y,
+    text: '+',
+    style: buttonStyle,
+    action: onPointerUp,
+  });
+  this.add.existing(addButton);
+  // const addButton = this.add.text(x, y, '+', buttonStyle);
+  // addButton.setInteractive({ useHandCursor: true });
+  // addButton.on('pointerup', onPointerUp);
 }
 
 function createAsyncButton(
   this: Scene,
   { onPointerUp = () => {} }: { onPointerUp: () => Promise<any> | void }
 ) {
-  const addAsyncButton = this.add.text(
-    285,
-    250,
-    'Add Async',
-    DEFAULT_BUTTON_STYLE
-  );
-  addAsyncButton.setInteractive({ useHandCursor: true });
-  let count = 0;
-  addAsyncButton.on('pointerup', async (...args: any) => {
-    console.log('on pointerup  > args:', args);
-    addAsyncButton.alpha = 0.3;
-    count++;
-    const res = await onPointerUp.apply(this, args);
-    count--;
-    console.log('event! > res:', res);
-    if (count === 0) {
-      addAsyncButton.alpha = 1;
-    }
+  const addAsyncButton = new TextButton({
+    scene: this,
+    x: 285 + 285 / 2,
+    y: 285,
+    text: 'Add Async',
+    style: DEFAULT_BUTTON_STYLE,
+    action: async (...args: any) => {
+      console.log('on pointerup  > args:', args);
+      await onPointerUp.apply(this, args);
+    },
   });
   addAsyncButton.setShadow(0, 4, '#333', 6, false, true);
+  this.add.existing(addAsyncButton);
 }
 
 function createSubtractButton(
   this: Scene,
   { onPointerUp = () => {} }: { onPointerUp: () => void }
 ) {
-  const addButton = this.add.text(550, 250, '-', DEFAULT_BUTTON_STYLE);
-  addButton.setInteractive({ useHandCursor: true });
-  addButton.on('pointerup', onPointerUp);
+  const addButton = new TextButton({
+    scene: this,
+    x: 560,
+    y: 220,
+    action: onPointerUp,
+    style: DEFAULT_BUTTON_STYLE,
+    text: '-',
+  });
+  this.add.existing(addButton);
 }
 
 function createFullscreenButton(
   this: Scene,
   {
-    x = 400,
-    y = 10,
+    x = 480,
+    y = 40,
     text = 'Fullscreen',
     style = DEFAULT_BUTTON_STYLE,
   }: {
@@ -330,18 +441,23 @@ function createFullscreenButton(
     this.add.text(400, 100, 'fullscreen is unsupported!');
   });
 
-  const fullscreenButton = this.add.text(x, y, text, style);
-  fullscreenButton.setInteractive({ useHandCursor: true });
-  fullscreenButton.on('pointerup', () => {
-    if (this.scale.isFullscreen) {
-      this.scale.stopFullscreen();
-      // On stop fulll screen
-    } else {
-      this.scale.startFullscreen();
-      // On start fulll screen
-    }
+  const fullscreenButton = new TextButton({
+    scene: this,
+    x,
+    y,
+    text,
+    style,
+    action: () => {
+      if (this.scale.isFullscreen) {
+        this.scale.stopFullscreen();
+        // On stop fulll screen
+      } else {
+        this.scale.startFullscreen();
+        // On start fulll screen
+      }
+    },
   });
-  // fullscreenButton.setBlendMode(Phaser.BlendModes.MULTIPLY);
+  this.add.existing(fullscreenButton);
 }
 
 function createGraphicsBackground(this: Scene) {

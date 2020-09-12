@@ -1,5 +1,5 @@
 import React from 'react';
-import PhaserGame from './features/game/PhaserGame';
+import PhaserGame from './components/game/PhaserGame';
 import './App.css';
 import './fonts.css';
 import { version } from '../package.json';

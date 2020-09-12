@@ -1,6 +1,6 @@
 export const SceneImports = {
-  LogoScene: (): Promise<any> => import('../scenes/LogoScene'),
-  SimpleScene: (): Promise<any> => import('../scenes/SimpleScene'),
+  LogoScene: (): Promise<any> => import('./LogoScene'),
+  SimpleScene: (): Promise<any> => import('./SimpleScene'),
   CounterScene: (): Promise<any> => import('../counter/CounterScene'),
 };
 

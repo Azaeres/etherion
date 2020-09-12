@@ -10,9 +10,9 @@ import {
 import logger from 'redux-logger';
 import { createOffline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
-import counterReducer from '../features/counter/counterState';
+import counterReducer from '../components/counter/counterState';
 import appReducer from '../appState';
-import gameReducer from '../features/game/gameState';
+import gameReducer from '../components/game/gameState';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import createMigration from './createMigration';
 

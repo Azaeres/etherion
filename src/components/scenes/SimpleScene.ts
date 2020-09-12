@@ -4,6 +4,7 @@ import kairensTreeImage from '../../artwork/Kairens_tree.png';
 import preloadFonts from '../../util/preloadFonts';
 import { store } from '../../state/store';
 import { navigate } from '../game/gameState';
+import TextButton, { fonts } from '../TextButton';
 // import moveCameraToScene from '../../util/moveCameraToScene';
 
 const DEFAULT_MENU_ITEM_STYLE = {
@@ -15,26 +16,26 @@ const DEFAULT_MENU_ITEM_STYLE = {
 export default class SimpleScene extends Scene {
   init(data: { bar: string }) {
     console.log('SimpleScene init - data:', data);
-
-    // this.imageID = data.id;
-    // this.imageFile = data.image;
   }
 
   preload() {
     this.load.image('kairens-tree', kairensTreeImage);
-    this.preloadFonts(['OpenSansCondensed-Bold']);
+    this.preloadFonts([...fonts]);
   }
 
   async create() {
     const bg = this.createBackground();
-    const swapSceneButton = this.createNextSceneButton({
-      x: 630,
+    const swapSceneButton = new TextButton({
+      scene: this,
+      text: 'Next Scene',
+      x: 690,
       y: 150,
-      onPointerUp: () =>
+      action: () =>
         store.dispatch(
           navigate({ sceneId: 'CounterScene', props: { foo: 'bar' } })
         ),
     });
+    this.add.existing(swapSceneButton);
 
     this.tweens.add({
       targets: [bg, swapSceneButton],
@@ -49,7 +50,6 @@ export default class SimpleScene extends Scene {
 
   // Mixins
   preloadFonts = preloadFonts.bind(this);
-  // moveCameraToScene = moveCameraToScene.bind(this);
 
   createBackground = createBackground.bind(this);
   createNextSceneButton = createNextSceneButton.bind(this);
