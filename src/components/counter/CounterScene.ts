@@ -5,12 +5,13 @@ import { navigate } from '../game/gameState';
 
 import testBackground from '../../test_background.jpg';
 import createCountText, { countTextFonts } from './CountText';
-import createLogoImage, { preloadLogoImage } from './LogoImage';
+import SpriteButton from './SpriteButton';
 // import createEtherionLogo, { preloadEtherionLogo } from './EtherionLogo';
 import { selectNeedsUpdate } from '../../appState';
 import preloadFonts from '../../util/preloadFonts';
 import { version } from '../../../package.json';
 import TextButton from '../TextButton';
+import etherionLogo from '../../etherion_logo-3.png';
 // import TextButton from '../TextButton';
 // import TextButton from '../TextButton';
 // import createButton from '../Button';
@@ -55,9 +56,10 @@ export default class CounterScene extends Scene {
 
   preload() {
     this.load.image('background', testBackground);
+    this.load.image('LogoImage_etherionLogo', etherionLogo);
 
     // this.preloadEtherionLogo();
-    this.preloadLogoImage();
+    // this.preloadLogoImage();
     this.preloadFonts([
       ...countTextFonts,
       'Oswald-ExtraLight',
@@ -81,7 +83,9 @@ export default class CounterScene extends Scene {
     this.createCountText({ x: 200, y: 200 });
     this.createAddButton({ x: 400, y: 200, onPointerUp: this.onAdd });
     this.createAddButton({ x: 40, y: 400, onPointerUp: this.onAdd });
-    this.createLogoImage();
+
+    this.createEtherionLogo();
+
     this.createNeedsUpdateNotification();
     const nextSceneButton = new TextButton({
       scene: this,
@@ -136,6 +140,28 @@ export default class CounterScene extends Scene {
     this.add.existing(this.propText);
   }
 
+  createEtherionLogo() {
+    const spriteButton = new SpriteButton({
+      scene: this,
+      x: this.sys.canvas.width - 150,
+      y: 150,
+      texture: 'LogoImage_etherionLogo',
+      action: async () => {
+        return await store.dispatch(navigate({ sceneId: 'LogoScene' }));
+      },
+    });
+    this.add.existing(spriteButton);
+    this.tweens.add({
+      targets: spriteButton,
+      angle: { from: 360, to: 0 },
+      ease: 'Linear',
+      // delay: 800,
+      duration: 2700,
+      repeat: -1,
+      yoyo: false,
+    });
+  }
+
   propsDidChange(nextProps: CounterSceneProps) {
     console.log('propsDidChange  > nextProps:', nextProps);
     this.props = nextProps;
@@ -165,12 +191,12 @@ export default class CounterScene extends Scene {
 
   // Mixins
   preloadFonts = preloadFonts.bind(this);
-  preloadLogoImage = preloadLogoImage.bind(this);
+  // preloadLogoImage = preloadLogoImage.bind(this);
   // preloadEtherionLogo = preloadEtherionLogo.bind(this);
 
   // createEtherionLogo = createEtherionLogo.bind(this);
   createBackground = createBackground.bind(this);
-  createLogoImage = createLogoImage.bind(this);
+  // createLogoImage = createLogoImage.bind(this);
   createGraphicsBackground = createGraphicsBackground.bind(this);
   createFullscreenButton = createFullscreenButton.bind(this);
   createSubtractButton = createSubtractButton.bind(this);
