@@ -1,6 +1,6 @@
 {
   "name": "etherion",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "dependencies": {
     "@redux-offline/redux-offline": "^2.6.0",
