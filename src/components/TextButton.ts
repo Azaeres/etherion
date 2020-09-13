@@ -4,7 +4,7 @@ export const fonts = ['OpenSansCondensed-Bold'];
 
 const DEFAULT_MENU_ITEM_STYLE = {
   color: 'white',
-  fontSize: 32,
+  fontSize: '32px',
   fontFamily: 'OpenSansCondensed-Bold',
 };
 
@@ -32,7 +32,7 @@ export default class TextButton extends Phaser.GameObjects.Text {
     x: number;
     y: number;
     text: string | string[];
-    style?: object;
+    style?: Phaser.Types.GameObjects.Text.TextStyle;
     disabled?: boolean;
     action?: Function;
   }) {

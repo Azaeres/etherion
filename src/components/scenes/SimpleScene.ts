@@ -1,15 +1,14 @@
 import { Scene } from 'phaser';
 
 import kairensTreeImage from '../../artwork/Kairens_tree.png';
-import preloadFonts from '../../util/preloadFonts';
 import { store } from '../../state/store';
 import { navigate } from '../game/gameState';
-import TextButton, { fonts } from '../TextButton';
-// import moveCameraToScene from '../../util/moveCameraToScene';
+import TextButton, { fonts as textButtonFonts } from '../TextButton';
+import NarrationText from '../NarrationText';
 
-const DEFAULT_MENU_ITEM_STYLE = {
+const DEFAULT_MENU_ITEM_STYLE: Phaser.Types.GameObjects.Text.TextStyle = {
   color: 'white',
-  fontSize: 32,
+  fontSize: '100px',
   fontFamily: 'OpenSansCondensed-Bold',
 };
 
@@ -20,7 +19,6 @@ export default class SimpleScene extends Scene {
 
   preload() {
     this.load.image('kairens-tree', kairensTreeImage);
-    this.preloadFonts([...fonts]);
   }
 
   async create() {
@@ -46,11 +44,17 @@ export default class SimpleScene extends Scene {
       repeat: 0,
       yoyo: false,
     });
+
+    const narrationText = new NarrationText({
+      scene: this,
+      x: 100,
+      y: this.sys.canvas.height - 100,
+      text: 'The quick red fox jumped over the lazy dog.',
+    });
+    this.add.existing(narrationText);
   }
 
   // Mixins
-  preloadFonts = preloadFonts.bind(this);
-
   createBackground = createBackground.bind(this);
   createNextSceneButton = createNextSceneButton.bind(this);
 }
