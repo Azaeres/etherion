@@ -1,9 +1,6 @@
 import { store } from '../../state/store';
 import { Scene } from 'phaser';
 import { selectCount } from './counterState';
-import { Immutable } from '../../state/types';
-
-export const countTextFonts: Immutable<string[]> = ['Oswald-SemiBold'];
 
 const STYLE = {
   color: 'white',

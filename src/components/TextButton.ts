@@ -1,7 +1,5 @@
 import Phaser, { Scene } from 'phaser';
 
-export const fonts = ['OpenSansCondensed-Bold'];
-
 const DEFAULT_MENU_ITEM_STYLE = {
   color: 'white',
   fontSize: '32px',

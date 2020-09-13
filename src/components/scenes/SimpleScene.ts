@@ -3,7 +3,7 @@ import { Scene } from 'phaser';
 import kairensTreeImage from '../../artwork/Kairens_tree.png';
 import { store } from '../../state/store';
 import { navigate } from '../game/gameState';
-import TextButton, { fonts as textButtonFonts } from '../TextButton';
+import TextButton from '../TextButton';
 import NarrationText from '../NarrationText';
 import createFadeIn from '../createFadeIn';
 
@@ -23,7 +23,7 @@ export default class SimpleScene extends Scene {
   }
 
   async create() {
-    const bg = this.createBackground();
+    this.createBackground();
     const swapSceneButton = new TextButton({
       scene: this,
       text: 'Next Scene',
@@ -39,10 +39,22 @@ export default class SimpleScene extends Scene {
     const narrationText = new NarrationText({
       scene: this,
       x: 100,
-      y: this.sys.canvas.height - 100,
+      y: this.sys.canvas.height - 200,
       text: 'The quick brown fox jumped over the lazy dog.',
     });
     this.add.existing(narrationText);
+    narrationText.fadeIn(500);
+
+    const playButton = new TextButton({
+      scene: this,
+      text: 'Play',
+      x: 200,
+      y: 200,
+      action: () => {
+        narrationText.fadeIn(100);
+      },
+    });
+    this.add.existing(playButton);
 
     this.createFadeIn(1600);
   }

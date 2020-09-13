@@ -1,4 +1,4 @@
-import Phaser, { Scene } from 'phaser';
+import { Scene } from 'phaser';
 
 export default function createFadeIn(this: Scene, duration: number) {
   var fg = this.add.rectangle(

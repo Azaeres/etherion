@@ -4,7 +4,7 @@ import { decrement, increment, incrementAsync } from './counterState';
 import { navigate } from '../game/gameState';
 
 import testBackground from '../../test_background.jpg';
-import createCountText, { countTextFonts } from './CountText';
+import createCountText from './CountText';
 import SpriteButton from './SpriteButton';
 import { selectNeedsUpdate } from '../../appState';
 import { version } from '../../../package.json';
