@@ -10,6 +10,7 @@ import { selectNeedsUpdate } from '../../appState';
 import { version } from '../../../package.json';
 import TextButton from '../TextButton';
 import etherionLogo from '../../etherion_logo-3.png';
+import createFadeIn from '../createFadeIn';
 
 const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in pellentesque purus. Nam eu finibus nibh. Ut porttitor vehicula tortor, id convallis orci porta sed. Pellentesque turpis tortor, faucibus eu placerat eu, tempor id nibh. Donec sollicitudin sem nunc, eu commodo velit maximus vitae. Aliquam eleifend ex sit amet tortor suscipit tempus. Nullam venenatis porta rhoncus. Ut malesuada magna non mauris tincidunt commodo.`;
 
@@ -47,7 +48,7 @@ export default class CounterScene extends Scene {
   async create() {
     console.log('CounterScene create > this.props:', this.props);
 
-    await this.createBackground();
+    this.createBackground();
     // this.createEtherionLogo();
     this.createGraphicsBackground();
     this.createFullscreenButton({ text: `FS----` });
@@ -112,6 +113,8 @@ export default class CounterScene extends Scene {
       },
     });
     this.add.existing(this.propText);
+
+    this.createFadeIn(200);
   }
 
   createEtherionLogo() {
@@ -174,6 +177,7 @@ export default class CounterScene extends Scene {
   createNeedsUpdateNotification = createNeedsUpdateNotification.bind(this);
   createVersionText = createVersionText.bind(this);
   createText = createText.bind(this);
+  createFadeIn = createFadeIn.bind(this);
 }
 
 function createText(
@@ -355,29 +359,13 @@ function createLoremText(this: Scene) {
   text.setShadow(0, 1, '#333', 2, false, true);
 }
 
-async function createBackground(this: Scene) {
-  return new Promise((resolve, reject) => {
-    const bg = this.add.image(0, 0, 'background');
-    bg.alpha = 0;
-    bg.setOrigin(0, 0);
-    bg.displayWidth = this.sys.canvas.width;
-    bg.displayHeight = this.sys.canvas.height;
+function createBackground(this: Scene) {
+  const bg = this.add.image(0, 0, 'background');
+  bg.setOrigin(0, 0);
+  bg.displayWidth = this.sys.canvas.width;
+  bg.displayHeight = this.sys.canvas.height;
 
-    // bg.setBlendMode(Phaser.BlendModes.MULTIPLY);
-
-    this.tweens.add({
-      targets: bg,
-      alpha: { from: 0, to: 1 },
-      ease: 'Linear',
-      delay: 100,
-      duration: 200,
-      repeat: 0,
-      yoyo: false,
-      onComplete: () => {
-        resolve();
-      },
-    });
-  });
+  // bg.setBlendMode(Phaser.BlendModes.MULTIPLY);
 }
 
 // function preloadFonts(this: Scene, fonts: Set<string>) {

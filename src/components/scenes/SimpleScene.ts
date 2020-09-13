@@ -5,6 +5,7 @@ import { store } from '../../state/store';
 import { navigate } from '../game/gameState';
 import TextButton, { fonts as textButtonFonts } from '../TextButton';
 import NarrationText from '../NarrationText';
+import createFadeIn from '../createFadeIn';
 
 const DEFAULT_MENU_ITEM_STYLE: Phaser.Types.GameObjects.Text.TextStyle = {
   color: 'white',
@@ -35,28 +36,21 @@ export default class SimpleScene extends Scene {
     });
     this.add.existing(swapSceneButton);
 
-    this.tweens.add({
-      targets: [bg, swapSceneButton],
-      alpha: { from: 0, to: 1 },
-      ease: 'Linear',
-      delay: 0,
-      duration: 1600,
-      repeat: 0,
-      yoyo: false,
-    });
-
     const narrationText = new NarrationText({
       scene: this,
       x: 100,
       y: this.sys.canvas.height - 100,
-      text: 'The quick red fox jumped over the lazy dog.',
+      text: 'The quick brown fox jumped over the lazy dog.',
     });
     this.add.existing(narrationText);
+
+    this.createFadeIn(1600);
   }
 
   // Mixins
   createBackground = createBackground.bind(this);
   createNextSceneButton = createNextSceneButton.bind(this);
+  createFadeIn = createFadeIn.bind(this);
 }
 
 function createNextSceneButton(
@@ -78,7 +72,7 @@ function createNextSceneButton(
 
 function createBackground(this: Scene) {
   const bg = this.add.image(0, 0, 'kairens-tree');
-  bg.alpha = 0;
+  // bg.alpha = 0;
   bg.setOrigin(0, 0);
   bg.scale = 0.4;
   bg.x = 0;
