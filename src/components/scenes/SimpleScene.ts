@@ -36,27 +36,44 @@ export default class SimpleScene extends Scene {
     });
     this.add.existing(swapSceneButton);
 
-    const narrationText = new NarrationText({
+    const narrationText1 = new NarrationText({
       scene: this,
       x: 100,
       y: this.sys.canvas.height - 200,
-      text: 'The quick brown fox jumped over the lazy dog.',
+      text: 'The quick brown fox',
     });
-    this.add.existing(narrationText);
-    narrationText.fadeIn(500);
+    this.add.existing(narrationText1);
+
+    const narrationText2 = new NarrationText({
+      scene: this,
+      x: 100,
+      y: this.sys.canvas.height - 170,
+      text: 'jumped over the lazy dog.',
+    });
+    this.add.existing(narrationText2);
 
     const playButton = new TextButton({
       scene: this,
       text: 'Play',
-      x: 200,
-      y: 200,
-      action: () => {
-        narrationText.fadeIn(100);
+      x: this.sys.canvas.width - 100,
+      y: this.sys.canvas.height - 50,
+      action: async () => {
+        console.log(' > this.tweens:', this.tweens);
+        narrationText1.hide();
+        narrationText2.hide();
+        await narrationText1.fadeIn(100);
+        await narrationText2.fadeIn(400);
+
+        console.log('fadeIn done  :');
       },
     });
     this.add.existing(playButton);
 
     this.createFadeIn(1600);
+
+    await narrationText1.fadeIn(1500);
+    await narrationText2.fadeIn(400);
+    console.log('fadeIn done  :');
   }
 
   // Mixins
