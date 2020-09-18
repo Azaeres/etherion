@@ -10,6 +10,8 @@ const SLIDE_IN = 24;
 
 export default class NarrationText extends Phaser.GameObjects.Text {
   private _originY: number;
+  private _alphaTween?: Phaser.Tweens.Tween;
+  private _positionTween?: Phaser.Tweens.Tween;
 
   constructor({
     scene,
@@ -32,33 +34,41 @@ export default class NarrationText extends Phaser.GameObjects.Text {
 
   public hide() {
     this.alpha = 0;
+    this.stop();
+  }
+
+  protected stop() {
+    this._alphaTween?.stop(0);
+    this._alphaTween = undefined;
+    this._positionTween?.stop(0);
+    this._positionTween = undefined;
   }
 
   public async fadeIn(delay: number) {
     this.alpha = 0;
     this.y = this._originY - SLIDE_IN;
-    const alphaTweenPromise = new Promise((resolve, reject) => {
-      this.scene.tweens.add({
+    const alphaTweenPromise = new Promise((resolve) => {
+      this._alphaTween = this.scene.tweens.add({
         targets: [this],
         alpha: { from: 0, to: 1 },
         ease: 'Linear',
         delay: delay + 80,
         duration: 360,
         onComplete: (...args) => {
-          console.log('alpha tween onComplete  > args:', args);
+          this._alphaTween = undefined;
           resolve();
         },
       });
     });
-    const positionTweenPromise = new Promise((resolve, reject) => {
-      this.scene.tweens.add({
+    const positionTweenPromise = new Promise((resolve) => {
+      this._positionTween = this.scene.tweens.add({
         targets: [this],
         y: this.y + SLIDE_IN,
         ease: 'Quad.easeOut',
         delay: delay,
         duration: 300,
         onComplete: (...args) => {
-          console.log('position tween onComplete  > args:', args);
+          this._positionTween = undefined;
           resolve();
         },
       });

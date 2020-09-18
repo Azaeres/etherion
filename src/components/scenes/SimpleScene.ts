@@ -55,7 +55,7 @@ export default class SimpleScene extends Scene {
     const playButton = new TextButton({
       scene: this,
       text: 'Play',
-      x: this.sys.canvas.width - 100,
+      x: this.sys.canvas.width - 50,
       y: this.sys.canvas.height - 50,
       action: async () => {
         console.log(' > this.tweens:', this.tweens);
