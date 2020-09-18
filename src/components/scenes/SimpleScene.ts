@@ -36,50 +36,129 @@ export default class SimpleScene extends Scene {
     });
     this.add.existing(swapSceneButton);
 
-    const narrationText1 = new NarrationText({
-      scene: this,
+    this.createFadeIn(1600);
+
+    const narrationTextInterface = this.createMultilineNarrationText({
       x: 100,
       y: this.sys.canvas.height - 200,
-      text: 'The quick brown fox',
+      text: `The quick brown fox
+jumped over
+the lazy brown dog.`,
     });
-    this.add.existing(narrationText1);
 
-    const narrationText2 = new NarrationText({
-      scene: this,
-      x: 100,
-      y: this.sys.canvas.height - 170,
-      text: 'jumped over the lazy dog.',
-    });
-    this.add.existing(narrationText2);
-
+    const TEXT_STOP = 'Stop';
+    const TEXT_PLAY = 'Play';
+    const onStop = () => {
+      console.log('onStop  :');
+      playButton.text = TEXT_PLAY;
+    };
     const playButton = new TextButton({
       scene: this,
-      text: 'Play',
-      x: this.sys.canvas.width - 50,
+      text: TEXT_STOP,
+      x: this.sys.canvas.width - 70,
       y: this.sys.canvas.height - 50,
-      action: async () => {
-        console.log(' > this.tweens:', this.tweens);
-        narrationText1.hide();
-        narrationText2.hide();
-        await narrationText1.fadeIn(100);
-        await narrationText2.fadeIn(400);
-
-        console.log('fadeIn done  :');
-      },
+      action: narrationTextInterface.playButtonActionCreator({
+        onStart: () => {
+          console.log('onStart  :');
+          playButton.text = TEXT_STOP;
+        },
+        onStop,
+      }),
     });
     this.add.existing(playButton);
 
-    this.createFadeIn(1600);
-
-    await narrationText1.fadeIn(1500);
-    await narrationText2.fadeIn(400);
-    console.log('fadeIn done  :');
+    await narrationTextInterface.start(1400);
+    onStop();
   }
 
   // Mixins
   createBackground = createBackground.bind(this);
   createNextSceneButton = createNextSceneButton.bind(this);
   createFadeIn = createFadeIn.bind(this);
+  createMultilineNarrationText = createMultilineNarrationText.bind(this);
+}
+
+function createMultilineNarrationText(
+  this: Scene,
+  { x, y, text }: { x: number; y: number; text?: string }
+) {
+  console.log('createMultilineNarrationText > text:', text);
+  const strings = text?.split('\n');
+  console.log(' > strings:', strings);
+  const LINE_HEIGHT = 30;
+
+  // : this.sys.canvas.height - 200
+  const narrationTexts = strings?.map((text, index) => {
+    const narrationText = new NarrationText({
+      scene: this,
+      x,
+      y: y + index * LINE_HEIGHT,
+      text,
+    });
+    this.add.existing(narrationText);
+    return narrationText;
+  });
+
+  const START_DELAY = 100;
+  const DELAY_BETWEEN_LINES = 400;
+  let isPlaying = false;
+  const playButtonActionCreator = ({
+    onStart,
+    onStop,
+  }: {
+    onStart?: Function;
+    onStop?: Function;
+  }) => {
+    console.log(' > this.tweens:', this.tweens);
+    return async () => {
+      console.log('play button click  > isPlaying:', isPlaying);
+      if (isPlaying) {
+        // Interupt and complete the text.
+        isPlaying = false;
+        onStop && onStop();
+        narrationTexts?.forEach((narrationText) => {
+          narrationText.complete();
+        });
+      } else {
+        // TODO: Change this to be a Continue event. Replay is for testing.
+        // Hides all lines and replays.
+        isPlaying = true;
+        onStart && onStart();
+        narrationTexts?.forEach((narrationText) => narrationText.stop());
+
+        if (narrationTexts) {
+          for (let index = 0; index < narrationTexts.length; index++) {
+            const element = narrationTexts[index];
+            await element.fadeIn(
+              index === 0 ? START_DELAY : DELAY_BETWEEN_LINES
+            );
+          }
+        }
+        isPlaying = false;
+        onStop && onStop();
+      }
+
+      console.log('fadeIn done  :');
+    };
+  };
+
+  const start = async (delay: number) => {
+    isPlaying = true;
+    if (narrationTexts) {
+      for (let index = 0; index < narrationTexts.length; index++) {
+        const element = narrationTexts[index];
+        await element.fadeIn(index === 0 ? delay : DELAY_BETWEEN_LINES);
+      }
+    }
+    isPlaying = false;
+    console.log('fadeIn done  :');
+  };
+
+  return {
+    narrationTexts,
+    playButtonActionCreator,
+    start,
+  };
 }
 
 function createNextSceneButton(

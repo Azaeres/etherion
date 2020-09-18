@@ -32,16 +32,20 @@ export default class NarrationText extends Phaser.GameObjects.Text {
     this.setShadow(0, 1, '#333', 2, false, true);
   }
 
-  public hide() {
+  public stop() {
     this.alpha = 0;
-    this.stop();
-  }
-
-  protected stop() {
     this._alphaTween?.stop(0);
     this._alphaTween = undefined;
     this._positionTween?.stop(0);
     this._positionTween = undefined;
+  }
+
+  public complete() {
+    this._alphaTween?.stop(1);
+    this._alphaTween = undefined;
+    this._positionTween?.stop(1);
+    this._positionTween = undefined;
+    this.alpha = 1;
   }
 
   public async fadeIn(delay: number) {
