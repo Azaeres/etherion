@@ -7,6 +7,8 @@ import TextButton from '../TextButton';
 import NarrationText from '../NarrationText';
 import createFadeIn from '../createFadeIn';
 
+type SimpleSceneProps = { bar?: string; variant?: number };
+
 const DEFAULT_MENU_ITEM_STYLE: Phaser.Types.GameObjects.Text.TextStyle = {
   color: 'white',
   fontSize: '100px',
@@ -14,8 +16,17 @@ const DEFAULT_MENU_ITEM_STYLE: Phaser.Types.GameObjects.Text.TextStyle = {
 };
 
 export default class SimpleScene extends Scene {
-  init(data: { bar: string }) {
+  props: SimpleSceneProps = { variant: 0 };
+  private _narrationText_variant0?: MultilineNarrationText;
+  private _narrationText_variant1?: MultilineNarrationText;
+  private _readyToContinue = false;
+
+  init(data: SimpleSceneProps) {
     console.log('SimpleScene init - data:', data);
+    this.props = data;
+    // if (this.props.variant === 1) {
+    //   this._readyToContinue = true;
+    // }
   }
 
   preload() {
@@ -38,37 +49,22 @@ export default class SimpleScene extends Scene {
 
     this.createFadeIn(1600);
 
-    const narrationTextInterface = this.createMultilineNarrationText({
+    this._narrationText_variant0 = this.createMultilineNarrationText({
       x: 100,
       y: this.sys.canvas.height - 200,
       text: `The quick brown fox
 jumped over
 the lazy brown dog.`,
     });
-
-    const TEXT_STOP = 'Stop';
-    const TEXT_PLAY = 'Play';
-    const onStop = () => {
-      console.log('onStop  :');
-      playButton.text = TEXT_PLAY;
-    };
-    const playButton = new TextButton({
-      scene: this,
-      text: TEXT_STOP,
-      x: this.sys.canvas.width - 70,
-      y: this.sys.canvas.height - 50,
-      action: narrationTextInterface.playButtonActionCreator({
-        onStart: () => {
-          console.log('onStart  :');
-          playButton.text = TEXT_STOP;
-        },
-        onStop,
-      }),
+    this._narrationText_variant1 = this.createMultilineNarrationText({
+      x: 100,
+      y: this.sys.canvas.height - 200,
+      text: `This is an example
+of another
+scene variant.`,
     });
-    this.add.existing(playButton);
 
-    await narrationTextInterface.start(1400);
-    onStop();
+    this.createPlayButton();
   }
 
   // Mixins
@@ -76,19 +72,134 @@ the lazy brown dog.`,
   createNextSceneButton = createNextSceneButton.bind(this);
   createFadeIn = createFadeIn.bind(this);
   createMultilineNarrationText = createMultilineNarrationText.bind(this);
+
+  async propsDidChange(nextProps: SimpleSceneProps) {
+    console.log('propsDidChange  > nextProps:', nextProps);
+    this.props = nextProps;
+    console.log(' > this.props:', this.props);
+    // console.log(' > this.propTextToggle:', this.propTextToggle);
+    if (this.props.variant === 1) {
+      this._narrationText_variant0?.stop();
+      await this._narrationText_variant1?.start(100);
+      this._readyToContinue = true;
+      console.log('propsDidChange READY TO CONTINUE  :');
+    }
+  }
+
+  async createPlayButton() {
+    console.log('createPlayButton  :');
+    const DEBUG = false;
+    const TEXT_WHEN_PLAYING = 'Interrupt';
+    const TEXT_WHEN_STOPPED = 'Continue';
+    const TEXT_WHEN_READY = 'Next Scene';
+    const onStop = () => {
+      console.log('onStop  :');
+      console.log(' > this.props.variant:', this.props.variant);
+      if (this.props.variant === undefined || this.props.variant === 0) {
+        playButton.text = TEXT_WHEN_STOPPED;
+      } else if (this.props.variant === 1) {
+        this._readyToContinue = true;
+        playButton.text = TEXT_WHEN_READY;
+        console.log('READY TO CONTINUE  :');
+      }
+    };
+    const playButton = new TextButton({
+      scene: this,
+      text: TEXT_WHEN_PLAYING,
+      x: this.sys.canvas.width - 70,
+      y: this.sys.canvas.height - 50,
+      action: this._narrationText_variant0?.playButtonActionCreator({
+        onStop,
+        onContinue: async () => {
+          console.log('onContinue  :');
+
+          if (DEBUG) {
+            // Hides all lines and replays.
+
+            console.log('Hiding all lines and replaying... :');
+            playButton.text = TEXT_WHEN_PLAYING;
+            await this._narrationText_variant0?.start(100);
+            onStop();
+          } else {
+            console.log('click > this.props:', this.props);
+            if (this.props.variant === undefined || this.props.variant === 0) {
+              console.log('navigating to variant 1...  :');
+              console.log(' > this._readyToContinue:', this._readyToContinue);
+              console.log(' > playButton.text:', playButton.text);
+              this._readyToContinue = false;
+              playButton.text = TEXT_WHEN_PLAYING;
+              await store.dispatch(
+                navigate({
+                  sceneId: 'SimpleScene',
+                  props: { ...this.props, variant: 1 },
+                })
+              );
+              // this._readyToContinue = true;
+              playButton.text = this._readyToContinue
+                ? TEXT_WHEN_READY
+                : TEXT_WHEN_PLAYING;
+            } else if (this.props.variant === 1) {
+              console.log(
+                'variant 1 > readyToContinue:',
+                this._readyToContinue
+              );
+              if (this._readyToContinue) {
+                this._readyToContinue = false;
+                playButton.text = TEXT_WHEN_READY;
+                await store.dispatch(
+                  navigate({ sceneId: 'CounterScene', props: { foo: 'bar' } })
+                );
+              } else {
+                console.log('completing variant 1...  :');
+                this._narrationText_variant1?.complete();
+                this._readyToContinue = true;
+                playButton.text = TEXT_WHEN_READY;
+                console.log('READY TO CONTINUE  :');
+              }
+            }
+          }
+        },
+      }),
+    });
+    this.add.existing(playButton);
+
+    console.log('Starting... > this.props:', this.props);
+    if (this.props.variant === undefined || this.props.variant === 0) {
+      console.log('starting variant 0  :');
+      await this._narrationText_variant0?.start(1400);
+      console.log('_narrationText_variant0 completed :');
+      onStop();
+    } else if (this.props.variant === 1) {
+      console.log('starting variant 1  :');
+      await this._narrationText_variant1?.start(1400);
+      console.log('_narrationText_variant1 completed :');
+      onStop();
+    }
+  }
+}
+
+interface MultilineNarrationText {
+  narrationTexts: NarrationText[];
+  playButtonActionCreator: ({
+    onStop,
+    onContinue,
+  }: {
+    onStop: Function;
+    onContinue: Function;
+  }) => () => Promise<any>;
+  start: (delay: number) => Promise<any>;
+  stop: Function;
+  complete: Function;
 }
 
 function createMultilineNarrationText(
   this: Scene,
-  { x, y, text }: { x: number; y: number; text?: string }
-) {
-  console.log('createMultilineNarrationText > text:', text);
+  { x, y, text }: { x: number; y: number; text: string }
+): MultilineNarrationText {
   const strings = text?.split('\n');
-  console.log(' > strings:', strings);
   const LINE_HEIGHT = 30;
 
-  // : this.sys.canvas.height - 200
-  const narrationTexts = strings?.map((text, index) => {
+  const narrationTexts = strings.map((text, index) => {
     const narrationText = new NarrationText({
       scene: this,
       x,
@@ -99,51 +210,31 @@ function createMultilineNarrationText(
     return narrationText;
   });
 
-  const START_DELAY = 100;
   const DELAY_BETWEEN_LINES = 400;
   let isPlaying = false;
   const playButtonActionCreator = ({
-    onStart,
     onStop,
+    onContinue,
   }: {
-    onStart?: Function;
     onStop?: Function;
+    onContinue?: Function;
   }) => {
-    console.log(' > this.tweens:', this.tweens);
     return async () => {
       console.log('play button click  > isPlaying:', isPlaying);
       if (isPlaying) {
         // Interupt and complete the text.
-        isPlaying = false;
+        console.log('Interrupting and completing the text...  :');
         onStop && onStop();
-        narrationTexts?.forEach((narrationText) => {
-          narrationText.complete();
-        });
+        complete();
       } else {
-        // TODO: Change this to be a Continue event. Replay is for testing.
-        // Hides all lines and replays.
-        isPlaying = true;
-        onStart && onStart();
-        narrationTexts?.forEach((narrationText) => narrationText.stop());
-
-        if (narrationTexts) {
-          for (let index = 0; index < narrationTexts.length; index++) {
-            const element = narrationTexts[index];
-            await element.fadeIn(
-              index === 0 ? START_DELAY : DELAY_BETWEEN_LINES
-            );
-          }
-        }
-        isPlaying = false;
-        onStop && onStop();
+        onContinue && (await onContinue());
       }
-
-      console.log('fadeIn done  :');
     };
   };
 
   const start = async (delay: number) => {
     isPlaying = true;
+    narrationTexts?.forEach((narrationText) => narrationText.stop());
     if (narrationTexts) {
       for (let index = 0; index < narrationTexts.length; index++) {
         const element = narrationTexts[index];
@@ -151,13 +242,28 @@ function createMultilineNarrationText(
       }
     }
     isPlaying = false;
-    console.log('fadeIn done  :');
+  };
+
+  const stop = () => {
+    isPlaying = false;
+    narrationTexts?.forEach((narrationText) => {
+      narrationText.stop();
+    });
+  };
+
+  const complete = () => {
+    isPlaying = false;
+    narrationTexts?.forEach((narrationText) => {
+      narrationText.complete();
+    });
   };
 
   return {
     narrationTexts,
     playButtonActionCreator,
     start,
+    stop,
+    complete,
   };
 }
 

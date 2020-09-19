@@ -26,7 +26,9 @@ export default async function moveCameraToScene(
     if (!propsAreEqual) {
       const scene: SceneProps = this.scene.getScene(toSceneId);
       console.log(' > scene:', scene);
-      scene && scene.propsDidChange && scene.propsDidChange(toScene.props);
+      scene &&
+        scene.propsDidChange &&
+        (await scene.propsDidChange(toScene.props));
     }
   } else {
     console.log('Navigating fromScene: ', fromScene);
