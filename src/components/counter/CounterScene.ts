@@ -65,7 +65,7 @@ export default class CounterScene extends Scene {
     const nextSceneButton = new TextButton({
       scene: this,
       x: 680,
-      y: 300,
+      y: 560,
       text: 'Next Scene',
       action: async () => {
         return store.dispatch(
@@ -79,8 +79,8 @@ export default class CounterScene extends Scene {
     let toggleDisabled = true;
     const disableToggleButton = new TextButton({
       scene: this,
-      x: 680,
-      y: 360,
+      x: 730,
+      y: 660,
       text: 'Enable',
       action: () => {
         toggleDisabled = !toggleDisabled;

@@ -1,12 +1,13 @@
 import React from 'react';
 import Phaser from 'phaser';
 
+// 2000 / 1125
 // const aspectRatio = 864 / 486;
 // const pixelsWidth = window.innerWidth * window.devicePixelRatio;
 // const pixelsHeight = window.innerHeight * window.devicePixelRatio;
 
-export const GAME_WIDTH = 864;
-export const GAME_HEIGHT = 486;
+export const GAME_WIDTH = 2000;
+export const GAME_HEIGHT = 1125;
 
 // export const { GAME_WIDTH, GAME_HEIGHT } = (() => {
 //   const y = (486 * pixelsWidth) / 864;

@@ -40,8 +40,8 @@ export default class SimpleScene extends Scene {
     const swapSceneButton = new TextButton({
       scene: this,
       text: 'Next Scene',
-      x: 690,
-      y: 150,
+      x: this.sys.canvas.width - 490,
+      y: 450,
       action: () =>
         store.dispatch(
           navigate({ sceneId: 'CounterScene', props: { foo: 'bar' } })
@@ -52,15 +52,15 @@ export default class SimpleScene extends Scene {
     this.createFadeIn(1600);
 
     this._narrationText_variant0 = this.createMultilineNarrationText({
-      x: 100,
-      y: this.sys.canvas.height - 200,
+      x: 240,
+      y: this.sys.canvas.height - 400,
       text: `The quick brown fox
 jumped over
 the lazy brown dog.`,
     });
     this._narrationText_variant1 = this.createMultilineNarrationText({
-      x: 100,
-      y: this.sys.canvas.height - 200,
+      x: 320,
+      y: this.sys.canvas.height - 300,
       text: `This is an example
 of another
 scene variant.`,
@@ -125,8 +125,8 @@ scene variant.`,
     const playButton = new TextButton({
       scene: this,
       text: TEXT_WHEN_PLAYING,
-      x: this.sys.canvas.width - 70,
-      y: this.sys.canvas.height - 50,
+      x: this.sys.canvas.width - 140,
+      y: this.sys.canvas.height - 150,
       action: this._narrationText_variant0?.playButtonActionCreator({
         onStop,
         onContinue: async () => {
@@ -212,7 +212,7 @@ function createMultilineNarrationText(
   { x, y, text }: { x: number; y: number; text: string }
 ): MultilineNarrationText {
   const strings = text?.split('\n');
-  const LINE_HEIGHT = 30;
+  const LINE_HEIGHT = 48;
 
   const narrationTexts = strings.map((text, index) => {
     const narrationText = new NarrationText({
@@ -285,8 +285,8 @@ function createMultilineNarrationText(
 function createNextSceneButton(
   this: Scene,
   {
-    x = 250,
-    y = 250,
+    x = this.sys.canvas.width - 250,
+    y = 650,
     onPointerUp = () => {},
     buttonStyle = DEFAULT_MENU_ITEM_STYLE,
   }: { x?: number; y?: number; onPointerUp?: () => void; buttonStyle?: object }
@@ -300,12 +300,9 @@ function createNextSceneButton(
 }
 
 function createBackground(this: Scene) {
-  const bg = this.add.image(0, 0, 'kairens-tree');
-  // bg.alpha = 0;
+  const bg = this.add.image(0, -70, 'kairens-tree');
   bg.setOrigin(0, 0);
-  bg.scale = 0.4;
-  bg.x = 0;
-  bg.y = -70;
+  bg.scale = 0.9;
 
   return bg;
 }

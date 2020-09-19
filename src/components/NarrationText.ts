@@ -2,7 +2,7 @@ import Phaser, { Scene } from 'phaser';
 
 const DEFAULT_STYLE = {
   color: 'white',
-  fontSize: '18px',
+  fontSize: '32px',
   fontFamily: 'Oswald-Light',
 };
 

@@ -2,7 +2,7 @@ import Phaser, { Scene } from 'phaser';
 
 const DEFAULT_MENU_ITEM_STYLE = {
   color: 'white',
-  fontSize: '32px',
+  fontSize: '64px',
   fontFamily: 'OpenSansCondensed-Bold',
 };
 
