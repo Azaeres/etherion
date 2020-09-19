@@ -95,7 +95,10 @@ export default class CounterScene extends Scene {
     });
     this.add.existing(disableToggleButton);
 
-    this.createVersionText({ x: 818, y: 465 });
+    this.createVersionText({
+      x: this.sys.canvas.width - 118,
+      y: this.sys.canvas.height - 85,
+    });
     this.propText = new TextButton({
       scene: this,
       x: 300,
@@ -211,7 +214,7 @@ function createVersionText(
   {
     x = 100,
     y = 100,
-    buttonStyle = { color: 'white', fontSize: 8 },
+    buttonStyle = { color: 'white', fontSize: '18px' },
   }: { x?: number; y?: number; buttonStyle?: object }
 ) {
   const versionText = this.add.text(x, y, `v${version}`, buttonStyle);
