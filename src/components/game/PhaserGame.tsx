@@ -1,11 +1,33 @@
 import React from 'react';
 import Phaser from 'phaser';
-// import { Camera } from './gameState';
-// import { RootState } from '../../state/store';
-// import { connect } from 'react-redux';
+
+// const aspectRatio = 864 / 486;
+// const pixelsWidth = window.innerWidth * window.devicePixelRatio;
+// const pixelsHeight = window.innerHeight * window.devicePixelRatio;
 
 export const GAME_WIDTH = 864;
 export const GAME_HEIGHT = 486;
+
+// export const { GAME_WIDTH, GAME_HEIGHT } = (() => {
+//   const y = (486 * pixelsWidth) / 864;
+//   if (y > pixelsHeight) {
+//     // 864 / 486 = x / pixelsHeight;
+//     const x = (pixelsHeight * 864) / 486;
+//     return {
+//       GAME_WIDTH: x,
+//       GAME_HEIGHT: pixelsHeight,
+//     };
+//   } else {
+//     // 864 / 486 = pixelsWidth / x;
+//     return {
+//       GAME_WIDTH: pixelsWidth,
+//       GAME_HEIGHT: y,
+//     };
+//   }
+// })();
+// console.log(' > GAME_WIDTH:', GAME_WIDTH);
+// console.log(' > GAME_HEIGHT:', GAME_HEIGHT);
+// console.log(' > GAME_WIDTH / aspectRatio:', GAME_WIDTH / aspectRatio);
 
 export interface IGameProps {
   // camera: Camera;

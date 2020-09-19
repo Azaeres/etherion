@@ -15,18 +15,20 @@ const DEFAULT_MENU_ITEM_STYLE: Phaser.Types.GameObjects.Text.TextStyle = {
   fontFamily: 'OpenSansCondensed-Bold',
 };
 
+const TEXT_WHEN_PLAYING = 'Interrupt';
+const TEXT_WHEN_STOPPED = 'Continue';
+const TEXT_WHEN_READY = 'Next Scene';
+
 export default class SimpleScene extends Scene {
   props: SimpleSceneProps = { variant: 0 };
   private _narrationText_variant0?: MultilineNarrationText;
   private _narrationText_variant1?: MultilineNarrationText;
   private _readyToContinue = false;
+  private _playButtonInterface?: PlayButtonInterface;
 
   init(data: SimpleSceneProps) {
     console.log('SimpleScene init - data:', data);
     this.props = data;
-    // if (this.props.variant === 1) {
-    //   this._readyToContinue = true;
-    // }
   }
 
   preload() {
@@ -64,7 +66,10 @@ of another
 scene variant.`,
     });
 
-    this.createPlayButton();
+    this._playButtonInterface = this.createPlayButton();
+    console.log(' > playButtonInterface:', this._playButtonInterface);
+    await this._playButtonInterface.start(1200);
+    // playButtonInterface.playButton.text =
   }
 
   // Mixins
@@ -82,16 +87,16 @@ scene variant.`,
       this._narrationText_variant0?.stop();
       await this._narrationText_variant1?.start(100);
       this._readyToContinue = true;
+      if (this._playButtonInterface) {
+        this._playButtonInterface.playButton.text = TEXT_WHEN_READY;
+      }
       console.log('propsDidChange READY TO CONTINUE  :');
     }
   }
 
-  async createPlayButton() {
+  createPlayButton(): PlayButtonInterface {
     console.log('createPlayButton  :');
     const DEBUG = false;
-    const TEXT_WHEN_PLAYING = 'Interrupt';
-    const TEXT_WHEN_STOPPED = 'Continue';
-    const TEXT_WHEN_READY = 'Next Scene';
     const onStop = () => {
       console.log('onStop  :');
       console.log(' > this.props.variant:', this.props.variant);
@@ -101,6 +106,20 @@ scene variant.`,
         this._readyToContinue = true;
         playButton.text = TEXT_WHEN_READY;
         console.log('READY TO CONTINUE  :');
+      }
+    };
+    const start = async (delay: number) => {
+      console.log('Starting... > this.props:', this.props);
+      if (this.props.variant === undefined || this.props.variant === 0) {
+        console.log('starting variant 0  :');
+        await this._narrationText_variant0?.start(delay);
+        console.log('_narrationText_variant0 completed :');
+        onStop();
+      } else if (this.props.variant === 1) {
+        console.log('starting variant 1  :');
+        await this._narrationText_variant1?.start(delay);
+        console.log('_narrationText_variant1 completed :');
+        onStop();
       }
     };
     const playButton = new TextButton({
@@ -128,7 +147,7 @@ scene variant.`,
               console.log(' > playButton.text:', playButton.text);
               this._readyToContinue = false;
               playButton.text = TEXT_WHEN_PLAYING;
-              await store.dispatch(
+              store.dispatch(
                 navigate({
                   sceneId: 'SimpleScene',
                   props: { ...this.props, variant: 1 },
@@ -162,20 +181,16 @@ scene variant.`,
       }),
     });
     this.add.existing(playButton);
-
-    console.log('Starting... > this.props:', this.props);
-    if (this.props.variant === undefined || this.props.variant === 0) {
-      console.log('starting variant 0  :');
-      await this._narrationText_variant0?.start(1400);
-      console.log('_narrationText_variant0 completed :');
-      onStop();
-    } else if (this.props.variant === 1) {
-      console.log('starting variant 1  :');
-      await this._narrationText_variant1?.start(1400);
-      console.log('_narrationText_variant1 completed :');
-      onStop();
-    }
+    return {
+      playButton,
+      start,
+    };
   }
+}
+
+interface PlayButtonInterface {
+  playButton: TextButton;
+  start: (delay: number) => Promise<any>;
 }
 
 interface MultilineNarrationText {
