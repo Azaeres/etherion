@@ -24,7 +24,7 @@ export default class NarrationText extends Phaser.GameObjects.Text {
     x: number;
     y: number;
     text: string | string[];
-    style?: object;
+    style?: Phaser.Types.GameObjects.Text.TextStyle;
   }) {
     super(scene, x, y, text, style);
     this._originY = y;

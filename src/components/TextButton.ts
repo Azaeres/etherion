@@ -15,7 +15,7 @@ interface PointerWithTarget extends Phaser.Input.Pointer {
 
 export default class TextButton extends Phaser.GameObjects.Text {
   private _disabled: boolean;
-  private _action?: Function;
+  protected _action?: Function;
 
   constructor({
     scene,
