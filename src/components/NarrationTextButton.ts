@@ -70,6 +70,7 @@ export default class NarrationTextButton extends TextButton {
   }
 
   public async start(index: number = 0) {
+    console.trace('NarrationTextButton start > index:', index);
     const priorIndex = this._currentIndex;
     this._currentIndex = index;
 

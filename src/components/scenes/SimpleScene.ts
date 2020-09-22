@@ -60,7 +60,8 @@ export default class SimpleScene extends Scene {
       // startIndex: this.props.variant,
       onItemStart: (indexStarted) => {
         console.log('onItemStart  > indexStarted:', indexStarted);
-        if (indexStarted !== this.props.variant) {
+        const variant = this.props.variant || 0;
+        if (indexStarted !== variant) {
           store.dispatch(
             navigate({
               sceneId: 'SimpleScene',
