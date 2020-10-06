@@ -13,13 +13,13 @@ export default async function createEtherionLogo(this: Scene) {
       'EtherionLogo_etherionLogo'
     );
 
-    etherionLogo.setScale(0.4);
+    etherionLogo.setScale(0.6);
     etherionLogo.setOrigin(0.5, 0.42);
     etherionLogo.alpha = 0.0;
 
     this.tweens.add({
       targets: etherionLogo,
-      scale: { from: 0.4, to: 0.6 },
+      scale: { from: 0.6, to: 1 },
       alpha: { from: 0, to: 1 },
       ease: 'Linear',
       delay: 100,
@@ -30,7 +30,7 @@ export default async function createEtherionLogo(this: Scene) {
         this.tweens.add({
           targets: etherionLogo,
           alpha: { from: 1, to: 0 },
-          scale: { from: 0.6, to: 1 },
+          scale: { from: 1, to: 1.4 },
           ease: 'Linear',
           delay: 0,
           duration: 200,

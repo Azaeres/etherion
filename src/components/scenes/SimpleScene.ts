@@ -18,7 +18,6 @@ const DEFAULT_MENU_ITEM_STYLE: Phaser.Types.GameObjects.Text.TextStyle = {
 
 export default class SimpleScene extends Scene {
   props: SimpleSceneProps = { variant: 0 };
-  private _narrationTextButton?: NarrationTextButton;
 
   init(data: SimpleSceneProps) {
     console.log('SimpleScene init - data:', data);
@@ -43,74 +42,81 @@ export default class SimpleScene extends Scene {
     });
     this.add.existing(swapSceneButton);
 
+    this.createNarrationText({ props: this.props });
     this.createFadeIn(1600);
-
-    console.log(' > this.props.variant:', this.props.variant);
-    this._narrationTextButton = new NarrationTextButton({
-      scene: this,
-      x: this.sys.canvas.width - 140,
-      y: this.sys.canvas.height - 150,
-      buttonStates: {
-        START: 'Start',
-        PLAYING: 'Interrupt',
-        PAUSED: 'Continue',
-        DONE: 'Next Scene',
-      },
-      // disabled: false,
-      // startIndex: this.props.variant,
-      onItemStart: (indexStarted) => {
-        console.log('onItemStart  > indexStarted:', indexStarted);
-        const variant = this.props.variant || 0;
-        if (indexStarted !== variant) {
-          store.dispatch(
-            navigate({
-              sceneId: 'SimpleScene',
-              props: { ...this.props, variant: indexStarted },
-            })
-          );
-        }
-      },
-      // onItemComplete: (indexCompleted) => {
-      //   console.log('onItemComplete  > indexCompleted:', indexCompleted);
-      // },
-      onComplete: () => {
-        console.log('NarrationTextButton action  :');
-        store.dispatch(
-          navigate({ sceneId: 'CounterScene', props: { foo: 'bar' } })
-        );
-      },
-      narrationTextSeries: [
-        new MultilineNarrationText({
-          scene: this,
-          x: 240,
-          y: this.sys.canvas.height - 400,
-          text: `The quick brown fox
-jumped over
-the lazy brown dog.`,
-        }),
-        new MultilineNarrationText({
-          scene: this,
-          x: 320,
-          y: this.sys.canvas.height - 300,
-          text: `This is an example
-of another
-scene variant.`,
-        }),
-      ],
-    });
-    this.add.existing(this._narrationTextButton);
-    this._narrationTextButton.start(this.props.variant);
   }
 
   // Mixins
   createBackground = createBackground.bind(this);
   createNextSceneButton = createNextSceneButton.bind(this);
   createFadeIn = createFadeIn.bind(this);
+  createNarrationText = createNarrationText.bind(this);
 }
 
 interface PlayButtonInterface {
   playButton: TextButton;
   start: (delay: number) => Promise<any>;
+}
+
+function createNarrationText(
+  this: Scene,
+  { props }: { props: SimpleSceneProps }
+) {
+  const narrationTextButton = new NarrationTextButton({
+    scene: this,
+    x: this.sys.canvas.width - 140,
+    y: this.sys.canvas.height - 150,
+    buttonStates: {
+      START: 'Start',
+      PLAYING: 'Interrupt',
+      PAUSED: 'Continue',
+      DONE: 'Next Scene',
+    },
+    // disabled: false,
+    // startIndex: this.props.variant,
+    onItemStart: (indexStarted) => {
+      console.log('onItemStart  > indexStarted:', indexStarted);
+      const variant = props.variant || 0;
+      if (indexStarted !== variant) {
+        store.dispatch(
+          navigate({
+            sceneId: 'SimpleScene',
+            props: { ...props, variant: indexStarted },
+          })
+        );
+      }
+    },
+    // onItemComplete: (indexCompleted) => {
+    //   console.log('onItemComplete  > indexCompleted:', indexCompleted);
+    // },
+    onComplete: () => {
+      console.log('NarrationTextButton action  :');
+      store.dispatch(
+        navigate({ sceneId: 'CounterScene', props: { foo: 'bar' } })
+      );
+    },
+    narrationTextSeries: [
+      new MultilineNarrationText({
+        scene: this,
+        x: 240,
+        y: this.sys.canvas.height - 400,
+        text: `The quick red fox
+jumped over
+the lazy brown dog.`,
+      }),
+      new MultilineNarrationText({
+        scene: this,
+        x: 320,
+        y: this.sys.canvas.height - 300,
+        text: `This is an example
+of another
+scene variant.`,
+      }),
+    ],
+  });
+  this.add.existing(narrationTextButton);
+  narrationTextButton.start(props.variant);
+  return narrationTextButton;
 }
 
 function createNextSceneButton(

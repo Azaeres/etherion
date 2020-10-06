@@ -91,7 +91,7 @@ export default class NarrationTextButton extends TextButton {
     // Start the animation.
     const multilineNarrationText: MultilineNarrationText = this
       ._narrationTextSeries[this._currentIndex];
-    await multilineNarrationText.start(1200);
+    await multilineNarrationText.start(0);
 
     // When done playing, advance to the next state.
     console.log('start ended  :');

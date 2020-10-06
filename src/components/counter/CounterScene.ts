@@ -69,7 +69,10 @@ export default class CounterScene extends Scene {
       text: 'Next Scene',
       action: async () => {
         return store.dispatch(
-          navigate({ sceneId: 'SimpleScene', props: { bar: 'baz' } })
+          navigate({
+            sceneId: 'SimpleScene',
+            props: { variant: 0, bar: 'baz' },
+          })
         );
       },
       disabled: true,
